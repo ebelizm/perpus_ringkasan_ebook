@@ -220,7 +220,6 @@ async function applyFilters() {
   }
 
   state.filtered = list;
-  state.shown = state.pageSize;
   $('#grid').innerHTML = '';
   $('#empty').classList.toggle('hidden', list.length > 0);
 
@@ -245,9 +244,11 @@ function highlight(text) {
 
 function renderMore() {
   const grid = $('#grid');
-  const end = Math.min(state.shown, state.filtered.length);
+  const start = grid.children.length;
+  if (start >= state.filtered.length) return;
+  const end = Math.min(start + state.pageSize, state.filtered.length);
   const frag = document.createDocumentFragment();
-  for (let i = grid.children.length; i < end; i++) {
+  for (let i = start; i < end; i++) {
     const b = state.filtered[i];
     const pct = getProgress(b.id);
     const doneFlag = isDone(b.id);
@@ -270,7 +271,11 @@ function renderMore() {
     frag.appendChild(card);
   }
   grid.appendChild(frag);
-  state.shown = end;
+  // jika sentinel masih dalam jangkauan viewport (layar besar / hasil sedikit), muat batch berikutnya
+  const rect = $('#sentinel').getBoundingClientRect();
+  if (grid.children.length < state.filtered.length && rect.top < window.innerHeight + 600) {
+    requestAnimationFrame(renderMore);
+  }
 }
 
 // ---------- konten ----------
