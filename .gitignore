@@ -3,8 +3,12 @@ android/
 www/
 .gradle/
 *.apk
-scratch/f15_books.json
-scratch/rofia_books.json
+scratch/*.json
+scratch/*.zip
+scratch/logs/
+scratch/logs.zip
+scratch/shots/
+scratch/sample*.html
 scratch/f15_failed.json
 scratch/rofia_skipped.json
 scratch/sample*.html
