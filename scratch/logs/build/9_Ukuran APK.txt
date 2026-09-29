@@ -1,8 +1,0 @@
-﻿2026-09-29T03:39:23.3875322Z ##[group]Run ls -lh android/app/build/outputs/apk/debug/app-debug.apk || true
-2026-09-29T03:39:23.3875897Z [36;1mls -lh android/app/build/outputs/apk/debug/app-debug.apk || true[0m
-2026-09-29T03:39:23.3917365Z shell: /usr/bin/bash -e {0}
-2026-09-29T03:39:23.3917655Z env:
-2026-09-29T03:39:23.3917971Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
-2026-09-29T03:39:23.3918450Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
-2026-09-29T03:39:23.3918868Z ##[endgroup]
-2026-09-29T03:39:23.3992826Z ls: cannot access 'android/app/build/outputs/apk/debug/app-debug.apk': No such file or directory
