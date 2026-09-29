@@ -164,6 +164,7 @@ async function init() {
     markDone(id, !isDone(id));
     toast(isDone(id) ? '✓ Ditandai selesai dibaca' : 'Dikembalikan ke sedang dibaca');
   });
+  $('#toc-toggle').addEventListener('click', () => $('#reader-toc').classList.toggle('open'));
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeReader();
   });
@@ -311,7 +312,9 @@ function syncDoneButton() {
   const btn = $('#toggle-done');
   const on = state.currentBook && isDone(state.currentBook.id);
   btn.classList.toggle('on', !!on);
-  btn.innerHTML = on ? '✓ Selesai dibaca' : '✓ Tandai selesai';
+  btn.innerHTML = on
+    ? '✓<span class="done-label"> Selesai dibaca</span>'
+    : '✓<span class="done-label"> Tandai selesai</span>';
 }
 
 async function openReader(book) {
@@ -324,6 +327,7 @@ async function openReader(book) {
       .filter(Boolean).join(' · ');
   $('#reader-body').innerHTML = '<p style="color:var(--muted)">Memuat…</p>';
   $('#reader-toc').innerHTML = '';
+  $('#reader-toc').classList.remove('open');
   $('#reader-progress-bar').style.width = '0%';
   syncDoneButton();
 
