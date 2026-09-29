@@ -1,0 +1,94 @@
+﻿2026-09-29T03:38:28.2490246Z ##[group]Run ./gradlew assembleDebug --no-daemon
+2026-09-29T03:38:28.2490639Z [36;1m./gradlew assembleDebug --no-daemon[0m
+2026-09-29T03:38:28.2532247Z shell: /usr/bin/bash -e {0}
+2026-09-29T03:38:28.2532537Z env:
+2026-09-29T03:38:28.2532852Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-09-29T03:38:28.2533336Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-09-29T03:38:28.2533885Z ##[endgroup]
+2026-09-29T03:38:28.7687668Z Downloading https://services.gradle.org/distributions/gradle-8.14.3-all.zip
+2026-09-29T03:38:31.7996253Z .....................10%.....................20%......................30%.....................40%......................50%.....................60%.....................70%......................80%.....................90%......................100%
+2026-09-29T03:38:34.7674289Z 
+2026-09-29T03:38:34.7675211Z Welcome to Gradle 8.14.3!
+2026-09-29T03:38:34.7675561Z 
+2026-09-29T03:38:34.7678712Z Here are the highlights of this release:
+2026-09-29T03:38:34.7679497Z  - Java 24 support
+2026-09-29T03:38:34.7689741Z  - GraalVM Native Image toolchain selection
+2026-09-29T03:38:34.7692682Z  - Enhancements to test reporting
+2026-09-29T03:38:34.7693208Z  - Build Authoring improvements
+2026-09-29T03:38:34.7693465Z 
+2026-09-29T03:38:34.7693932Z For more details see https://docs.gradle.org/8.14.3/release-notes.html
+2026-09-29T03:38:34.7694431Z 
+2026-09-29T03:38:34.8671950Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-09-29T03:38:36.2659948Z Daemon will be stopped at the end of the build 
+2026-09-29T03:39:05.6692245Z 
+2026-09-29T03:39:05.6708402Z > Configure project :app
+2026-09-29T03:39:05.6709951Z WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+2026-09-29T03:39:08.3671523Z 
+2026-09-29T03:39:08.3703777Z > Configure project :capacitor-cordova-android-plugins
+2026-09-29T03:39:08.3732684Z WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+2026-09-29T03:39:09.8669706Z 
+2026-09-29T03:39:09.8679788Z > Task :app:preBuild UP-TO-DATE
+2026-09-29T03:39:09.8683841Z > Task :app:preDebugBuild UP-TO-DATE
+2026-09-29T03:39:09.9728202Z > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+2026-09-29T03:39:10.0660441Z > Task :capacitor-android:preBuild UP-TO-DATE
+2026-09-29T03:39:10.0675527Z > Task :capacitor-android:preDebugBuild UP-TO-DATE
+2026-09-29T03:39:10.1683330Z > Task :capacitor-cordova-android-plugins:preBuild UP-TO-DATE
+2026-09-29T03:39:10.1684831Z > Task :capacitor-cordova-android-plugins:preDebugBuild UP-TO-DATE
+2026-09-29T03:39:10.1689504Z > Task :app:javaPreCompileDebug
+2026-09-29T03:39:10.1690634Z > Task :capacitor-cordova-android-plugins:writeDebugAarMetadata
+2026-09-29T03:39:10.1692006Z > Task :capacitor-android:writeDebugAarMetadata
+2026-09-29T03:39:10.1692942Z > Task :capacitor-android:processDebugNavigationResources
+2026-09-29T03:39:15.9670498Z > Task :capacitor-cordova-android-plugins:processDebugNavigationResources
+2026-09-29T03:39:15.9679220Z > Task :app:checkDebugAarMetadata
+2026-09-29T03:39:16.0658329Z > Task :app:processDebugNavigationResources
+2026-09-29T03:39:16.4659947Z > Task :app:generateDebugResValues
+2026-09-29T03:39:16.4661624Z > Task :capacitor-android:generateDebugResValues
+2026-09-29T03:39:16.4662558Z > Task :app:compileDebugNavigationResources
+2026-09-29T03:39:16.4663501Z > Task :capacitor-android:generateDebugResources
+2026-09-29T03:39:16.5658786Z > Task :capacitor-android:packageDebugResources
+2026-09-29T03:39:16.5682198Z > Task :capacitor-cordova-android-plugins:generateDebugResValues
+2026-09-29T03:39:16.5686426Z > Task :capacitor-cordova-android-plugins:generateDebugResources
+2026-09-29T03:39:16.5687994Z > Task :capacitor-cordova-android-plugins:packageDebugResources
+2026-09-29T03:39:16.6671597Z > Task :app:mapDebugSourceSetPaths
+2026-09-29T03:39:16.6702229Z > Task :app:generateDebugResources
+2026-09-29T03:39:17.3699156Z > Task :app:packageDebugResources
+2026-09-29T03:39:17.9662429Z > Task :app:mergeDebugResources
+2026-09-29T03:39:18.3667283Z > Task :app:createDebugCompatibleScreenManifests
+2026-09-29T03:39:18.3692689Z > Task :app:extractDeepLinksDebug
+2026-09-29T03:39:18.3764076Z > Task :capacitor-android:extractDeepLinksDebug
+2026-09-29T03:39:18.3793713Z > Task :capacitor-cordova-android-plugins:extractDeepLinksDebug
+2026-09-29T03:39:18.4659272Z > Task :capacitor-android:compileDebugLibraryResources
+2026-09-29T03:39:18.4664152Z > Task :app:parseDebugLocalResources
+2026-09-29T03:39:18.4679194Z > Task :capacitor-android:parseDebugLocalResources
+2026-09-29T03:39:18.4692106Z > Task :capacitor-cordova-android-plugins:compileDebugLibraryResources
+2026-09-29T03:39:18.4693166Z > Task :capacitor-cordova-android-plugins:processDebugManifest
+2026-09-29T03:39:18.4694006Z > Task :capacitor-android:processDebugManifest
+2026-09-29T03:39:18.5659465Z > Task :capacitor-android:generateDebugRFile
+2026-09-29T03:39:18.6683136Z > Task :app:processDebugMainManifest
+2026-09-29T03:39:18.9670008Z > Task :app:processDebugManifest
+2026-09-29T03:39:18.9693402Z > Task :app:processDebugManifestForPackage
+2026-09-29T03:39:18.9722315Z > Task :capacitor-android:javaPreCompileDebug
+2026-09-29T03:39:18.9728979Z > Task :capacitor-cordova-android-plugins:parseDebugLocalResources
+2026-09-29T03:39:18.9730273Z > Task :capacitor-cordova-android-plugins:javaPreCompileDebug
+2026-09-29T03:39:18.9731388Z > Task :app:mergeDebugShaders
+2026-09-29T03:39:18.9732176Z > Task :capacitor-cordova-android-plugins:generateDebugRFile
+2026-09-29T03:39:23.1681915Z 
+2026-09-29T03:39:23.1683075Z > Task :capacitor-android:compileDebugJavaWithJavac FAILED
+2026-09-29T03:39:23.1683650Z 
+2026-09-29T03:39:23.1685011Z [Incubating] Problems report is available at: file:///home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/build/reports/problems/problems-report.html
+2026-09-29T03:39:23.1686251Z 39 actionable tasks: 39 executed
+2026-09-29T03:39:23.1708054Z FAILURE: Build failed with an exception.
+2026-09-29T03:39:23.1721729Z 
+2026-09-29T03:39:23.1752527Z * What went wrong:
+2026-09-29T03:39:23.1769763Z Execution failed for task ':capacitor-android:compileDebugJavaWithJavac'.
+2026-09-29T03:39:23.1770698Z > Java compilation initialization error
+2026-09-29T03:39:23.1771578Z     error: invalid source release: 21
+2026-09-29T03:39:23.1772081Z 
+2026-09-29T03:39:23.1772523Z * Try:
+2026-09-29T03:39:23.1773038Z > Run with --stacktrace option to get the stack trace.
+2026-09-29T03:39:23.1773483Z > Run with --info or --debug option to get more log output.
+2026-09-29T03:39:23.1773887Z > Run with --scan to get full insights.
+2026-09-29T03:39:23.1774251Z > Get more help at https://help.gradle.org.
+2026-09-29T03:39:23.1774449Z 
+2026-09-29T03:39:23.1774569Z BUILD FAILED in 54s
+2026-09-29T03:39:23.3832686Z ##[error]Process completed with exit code 1.

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>scrolltest</title></head>
+<body>
+<iframe id="f" src="/" style="width:900px;height:900px;border:0"></iframe>
+<pre id="out">menunggu…</pre>
+<script>
+const log = [];
+function report(final) {
+  document.getElementById('out').textContent =
+    'LOG:' + log.join(' | ') + (final ? ' | FINAL:' + final : '');
+}
+window.addEventListener('load', async () => {
+  const f = document.getElementById('f');
+  const w = f.contentWindow, d = f.contentDocument;
+  // tunggu kartu pertama muncul
+  const t0 = Date.now();
+  while (!d.querySelector('.card') && Date.now() - t0 < 15000) {
+    await new Promise(r => setTimeout(r, 200));
+  }
+  const count = () => d.querySelectorAll('.card').length;
+  log.push('awal=' + count());
+  // simulasikan 8 siklus scroll (seperti infinite scroll)
+  for (let i = 0; i < 8; i++) {
+    w.scrollTo(0, d.body.scrollHeight);
+    await new Promise(r => setTimeout(r, 700));
+    log.push('s' + (i + 1) + '=' + count());
+  }
+  // cek pencarian
+  const inp = d.getElementById('search');
+  inp.value = 'habits';
+  inp.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise(r => setTimeout(r, 800));
+  log.push('cari-habits=' + count());
+  inp.value = '';
+  inp.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise(r => setTimeout(r, 800));
+  log.push('reset=' + count());
+  // tab Selesai
+  const doneTab = d.querySelector('[data-tab="done"]');
+  doneTab.click();
+  await new Promise(r => setTimeout(r, 500));
+  log.push('tab-selesai=' + count());
+  report('OK');
+});
+setTimeout(() => { if (document.getElementById('out').textContent.includes('menunggu')) report('TIMEOUT'); }, 30000);
+</script>
+</body></html>

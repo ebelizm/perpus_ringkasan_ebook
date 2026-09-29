@@ -1,0 +1,8 @@
+2026-09-29T03:38:07.5300000Z Job is waiting for a hosted runner to come online.
+2026-09-29T03:38:07.5300000Z Job is about to start running on the hosted runner: GitHub Actions 1000000036
+2026-09-29T03:38:07.5270000Z Evaluating build.if
+2026-09-29T03:38:07.5270000Z Evaluating: success()
+2026-09-29T03:38:07.5270000Z Result: true
+2026-09-29T03:38:07.5280000Z Requested labels: ubuntu-latest
+2026-09-29T03:38:07.5280000Z Job defined at: ebelizm/perpus_ringkasan_ebook/.github/workflows/build-apk.yml@refs/heads/main
+2026-09-29T03:38:07.5280000Z Waiting for a runner to pick up this job...
