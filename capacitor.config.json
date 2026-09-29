@@ -1,0 +1,8 @@
+{
+  "appId": "com.perpustakaan.ringkasan",
+  "appName": "Perpustakaan Ringkasan",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

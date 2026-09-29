@@ -1,0 +1,12 @@
+{
+  "name": "perpustakaan-ringkasan-offline",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "scrape:f15": "node scratch/scrape_f15.mjs",
+    "scrape:rofia": "node scratch/scrape_rofia.mjs",
+    "build:data": "node scratch/build.mjs"
+  }
+}

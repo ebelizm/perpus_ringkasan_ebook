@@ -1,0 +1,15 @@
+node_modules/
+android/
+www/
+.gradle/
+*.apk
+scratch/f15_books.json
+scratch/rofia_books.json
+scratch/f15_failed.json
+scratch/rofia_skipped.json
+scratch/sample*.html
+scratch/coll_sample.html
+scratch/dom*.html
+scratch/dom*_err.txt
+scratch/f15_log.txt
+scratch/rofia_log.txt

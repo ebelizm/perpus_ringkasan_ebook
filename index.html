@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f1115" />
+  <title>Perpustakaan Ringkasan Buku — Offline</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-icon">📚</span>
+        <div>
+          <h1>Perpustakaan Ringkasan</h1>
+          <p id="stat-line">Memuat data…</p>
+        </div>
+      </div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input id="search" type="search" placeholder="Cari judul, penulis…" autocomplete="off" enterkeyhint="search" />
+      </div>
+      <label class="full-check">
+        <input type="checkbox" id="full-search" />
+        <span>telusuri isi</span>
+      </label>
+    </div>
+  </header>
+
+  <nav class="filterbar">
+    <div class="filterbar-inner">
+      <div class="seg" id="read-tabs" role="tablist">
+        <button class="seg-btn active" data-tab="all">Semua</button>
+        <button class="seg-btn" data-tab="reading">Dibaca <span id="count-reading"></span></button>
+        <button class="seg-btn" data-tab="done">Selesai <span id="count-done"></span></button>
+      </div>
+      <div class="chips" id="source-chips"></div>
+      <select id="category-select" title="Filter kategori">
+        <option value="">Semua kategori</option>
+      </select>
+      <select id="sort-select" title="Urutkan">
+        <option value="title">Judul A–Z</option>
+        <option value="words">Terpanjang</option>
+      </select>
+    </div>
+  </nav>
+
+  <main id="grid" class="grid"></main>
+  <div id="sentinel" style="height:1px"></div>
+  <div id="empty" class="empty hidden">Tidak ada hasil. Coba kata kunci lain.</div>
+
+  <!-- Panel baca -->
+  <div id="reader" class="reader hidden" role="dialog" aria-modal="true">
+    <div class="reader-backdrop" data-close></div>
+    <div class="reader-panel">
+      <header class="reader-head">
+        <button class="icon-btn" data-close title="Tutup (Esc)">✕</button>
+        <div class="reader-head-info">
+          <h2 id="reader-title"></h2>
+          <p id="reader-meta"></p>
+        </div>
+        <div class="reader-tools">
+          <button class="icon-btn" id="font-dec" title="Perkecil huruf">A−</button>
+          <button class="icon-btn" id="font-inc" title="Perbesar huruf">A+</button>
+          <button class="done-btn" id="toggle-done" title="Tandai selesai">✓ Selesai</button>
+        </div>
+      </header>
+      <div class="reader-progress"><div id="reader-progress-bar"></div></div>
+      <div class="reader-toc" id="reader-toc"></div>
+      <article class="reader-body" id="reader-body"></article>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+    }
+  </script>
+</body>
+</html>
