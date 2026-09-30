@@ -1,0 +1,507 @@
+﻿2026-09-30T05:43:21.5509200Z Current runner version: '2.337.0'
+2026-09-30T05:43:21.5534512Z ##[group]Runner Image Provisioner
+2026-09-30T05:43:21.5535471Z Hosted Compute Agent
+2026-09-30T05:43:21.5536320Z Version: 20260828.587
+2026-09-30T05:43:21.5537079Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-30T05:43:21.5537842Z Build Date: 2026-08-28T16:44:25Z
+2026-09-30T05:43:21.5538537Z Worker ID: {1ffe0be5-3ad0-48d4-b07e-ba836f85eb20}
+2026-09-30T05:43:21.5539321Z Azure Region: westus
+2026-09-30T05:43:21.5539901Z ##[endgroup]
+2026-09-30T05:43:21.5541577Z ##[group]Operating System
+2026-09-30T05:43:21.5542323Z Ubuntu
+2026-09-30T05:43:21.5542865Z 24.04.5
+2026-09-30T05:43:21.5543407Z LTS
+2026-09-30T05:43:21.5544008Z ##[endgroup]
+2026-09-30T05:43:21.5544546Z ##[group]Runner Image
+2026-09-30T05:43:21.5545223Z Image: ubuntu-24.04
+2026-09-30T05:43:21.5545988Z Version: 20260920.314.1
+2026-09-30T05:43:21.5547358Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-30T05:43:21.5548924Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260920.314
+2026-09-30T05:43:21.5550411Z ##[endgroup]
+2026-09-30T05:43:21.5551614Z ##[group]GITHUB_TOKEN Permissions
+2026-09-30T05:43:21.5553910Z Contents: read
+2026-09-30T05:43:21.5554558Z Metadata: read
+2026-09-30T05:43:21.5555206Z Packages: read
+2026-09-30T05:43:21.5556138Z ##[endgroup]
+2026-09-30T05:43:21.5558275Z Secret source: Actions
+2026-09-30T05:43:21.5559362Z Cache mode: write
+2026-09-30T05:43:21.5560049Z Prepare workflow directory
+2026-09-30T05:43:21.5935588Z Prepare all required actions
+2026-09-30T05:43:21.6008184Z Getting action download info
+2026-09-30T05:43:21.9620559Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-09-30T05:43:22.0833618Z Download action repository 'actions/setup-java@v4' (SHA:cf277c60eb25467037889841efdb72551f06f6c3)
+2026-09-30T05:43:22.6071578Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-09-30T05:43:22.6979582Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-09-30T05:43:22.9210816Z Complete job name: build
+2026-09-30T05:43:23.0048473Z ##[group]Run actions/checkout@v4
+2026-09-30T05:43:23.0049457Z with:
+2026-09-30T05:43:23.0050008Z   repository: ebelizm/perpus_ringkasan_ebook
+2026-09-30T05:43:23.0054207Z   token: ***
+2026-09-30T05:43:23.0054707Z   ssh-strict: true
+2026-09-30T05:43:23.0055201Z   ssh-user: git
+2026-09-30T05:43:23.0055922Z   persist-credentials: true
+2026-09-30T05:43:23.0056486Z   clean: true
+2026-09-30T05:43:23.0056985Z   sparse-checkout-cone-mode: true
+2026-09-30T05:43:23.0057555Z   fetch-depth: 1
+2026-09-30T05:43:23.0058046Z   fetch-tags: false
+2026-09-30T05:43:23.0058550Z   show-progress: true
+2026-09-30T05:43:23.0059057Z   lfs: false
+2026-09-30T05:43:23.0059526Z   submodules: false
+2026-09-30T05:43:23.0060027Z   set-safe-directory: true
+2026-09-30T05:43:23.0060593Z   allow-unsafe-pr-checkout: false
+2026-09-30T05:43:23.0061508Z ##[endgroup]
+2026-09-30T05:43:23.1093573Z Syncing repository: ebelizm/perpus_ringkasan_ebook
+2026-09-30T05:43:23.1097063Z ##[group]Getting Git version info
+2026-09-30T05:43:23.1099161Z Working directory is '/home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook'
+2026-09-30T05:43:23.1101714Z [command]/usr/bin/git version
+2026-09-30T05:43:23.1197017Z git version 2.55.0
+2026-09-30T05:43:23.1223714Z ##[endgroup]
+2026-09-30T05:43:23.1242794Z Temporarily overriding HOME='/home/runner/work/_temp/8624b475-9e2c-4628-bdda-8cbd90902d81' before making global git config changes
+2026-09-30T05:43:23.1245060Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-30T05:43:23.1249142Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook
+2026-09-30T05:43:23.1303679Z Deleting the contents of '/home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook'
+2026-09-30T05:43:23.1309260Z ##[group]Initializing the repository
+2026-09-30T05:43:23.1312867Z [command]/usr/bin/git init /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook
+2026-09-30T05:43:23.1446005Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-30T05:43:23.1447882Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-30T05:43:23.1449577Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-30T05:43:23.1450936Z hint: call:
+2026-09-30T05:43:23.1451875Z hint:
+2026-09-30T05:43:23.1452776Z hint: 	git config --global init.defaultBranch <name>
+2026-09-30T05:43:23.1453884Z hint:
+2026-09-30T05:43:23.1454957Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-30T05:43:23.1456897Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-30T05:43:23.1458243Z hint:
+2026-09-30T05:43:23.1458975Z hint: 	git branch -m <name>
+2026-09-30T05:43:23.1459824Z hint:
+2026-09-30T05:43:23.1460958Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-30T05:43:23.1463095Z Initialized empty Git repository in /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/.git/
+2026-09-30T05:43:23.1473080Z [command]/usr/bin/git remote add origin https://github.com/ebelizm/perpus_ringkasan_ebook
+2026-09-30T05:43:23.1519599Z ##[endgroup]
+2026-09-30T05:43:23.1521033Z ##[group]Disabling automatic garbage collection
+2026-09-30T05:43:23.1523239Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-30T05:43:23.1559623Z ##[endgroup]
+2026-09-30T05:43:23.1560890Z ##[group]Setting up auth
+2026-09-30T05:43:23.1573048Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-30T05:43:23.1607937Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-30T05:43:23.2022661Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-30T05:43:23.2060164Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-30T05:43:23.2285457Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-30T05:43:23.2323947Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-30T05:43:23.2550157Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-30T05:43:23.2591743Z ##[endgroup]
+2026-09-30T05:43:23.2602146Z ##[group]Fetching the repository
+2026-09-30T05:43:23.2603815Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +344e9300f6470c800ce428655044088d54810d6c:refs/remotes/origin/main
+2026-09-30T05:43:43.8365914Z From https://github.com/ebelizm/perpus_ringkasan_ebook
+2026-09-30T05:43:43.8367215Z  * [new ref]         344e9300f6470c800ce428655044088d54810d6c -> origin/main
+2026-09-30T05:43:43.8370794Z ##[endgroup]
+2026-09-30T05:43:43.8372185Z ##[group]Determining the checkout info
+2026-09-30T05:43:43.8374439Z ##[endgroup]
+2026-09-30T05:43:43.8382674Z [command]/usr/bin/git sparse-checkout disable
+2026-09-30T05:43:43.8440027Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-30T05:43:43.8473281Z ##[group]Checking out the ref
+2026-09-30T05:43:43.8478079Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-09-30T05:43:44.3013745Z Switched to a new branch 'main'
+2026-09-30T05:43:44.3018899Z branch 'main' set up to track 'origin/main'.
+2026-09-30T05:43:44.3027121Z ##[endgroup]
+2026-09-30T05:43:44.3082872Z [command]/usr/bin/git log -1 --format=%H
+2026-09-30T05:43:44.3113006Z 344e9300f6470c800ce428655044088d54810d6c
+2026-09-30T05:43:44.3414000Z ##[group]Run actions/setup-java@v4
+2026-09-30T05:43:44.3414339Z with:
+2026-09-30T05:43:44.3414555Z   distribution: temurin
+2026-09-30T05:43:44.3414778Z   java-version: 21
+2026-09-30T05:43:44.3414987Z   java-package: jdk
+2026-09-30T05:43:44.3415200Z   check-latest: false
+2026-09-30T05:43:44.3415409Z   server-id: github
+2026-09-30T05:43:44.3415622Z   server-username: GITHUB_ACTOR
+2026-09-30T05:43:44.3416258Z   server-password: GITHUB_TOKEN
+2026-09-30T05:43:44.3416525Z   overwrite-settings: true
+2026-09-30T05:43:44.3416760Z   job-status: success
+2026-09-30T05:43:44.3419002Z   token: ***
+2026-09-30T05:43:44.3419221Z ##[endgroup]
+2026-09-30T05:43:44.5090360Z ##[warning]setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+2026-09-30T05:43:44.5098824Z ##[group]Installed distributions
+2026-09-30T05:43:44.5307906Z Resolved Java 21.0.12+1 from tool-cache
+2026-09-30T05:43:44.5308674Z Setting Java 21.0.12+1 as the default
+2026-09-30T05:43:44.5319742Z (node:2246) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-09-30T05:43:44.5321024Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T05:43:44.5324306Z Creating toolchains.xml for JDK version 21 from temurin
+2026-09-30T05:43:44.5403022Z Writing to /home/runner/.m2/toolchains.xml
+2026-09-30T05:43:44.5403469Z 
+2026-09-30T05:43:44.5403648Z Java configuration:
+2026-09-30T05:43:44.5404079Z   Distribution: temurin
+2026-09-30T05:43:44.5404491Z   Version: 21.0.12+1
+2026-09-30T05:43:44.5405064Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:43:44.5405606Z 
+2026-09-30T05:43:44.5416985Z ##[endgroup]
+2026-09-30T05:43:44.5468637Z Creating settings.xml with server-id: github
+2026-09-30T05:43:44.5487204Z Writing to /home/runner/.m2/settings.xml
+2026-09-30T05:43:44.5680224Z ##[group]Run actions/setup-node@v4
+2026-09-30T05:43:44.5680670Z with:
+2026-09-30T05:43:44.5680979Z   node-version: 22
+2026-09-30T05:43:44.5681329Z   always-auth: false
+2026-09-30T05:43:44.5681670Z   check-latest: false
+2026-09-30T05:43:44.5685402Z   token: ***
+2026-09-30T05:43:44.5686087Z env:
+2026-09-30T05:43:44.5686599Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:43:44.5687410Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:43:44.5688029Z ##[endgroup]
+2026-09-30T05:43:44.7193474Z Found in cache @ /opt/hostedtoolcache/node/22.23.2/x64
+2026-09-30T05:43:44.7199155Z (node:2259) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-09-30T05:43:44.7200905Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T05:43:44.7203241Z ##[group]Environment details
+2026-09-30T05:43:47.4358077Z node: v22.23.2
+2026-09-30T05:43:47.4358678Z npm: 10.9.8
+2026-09-30T05:43:47.4359093Z yarn: 1.22.22
+2026-09-30T05:43:47.4360600Z ##[endgroup]
+2026-09-30T05:43:47.4493918Z ##[group]Run npm install --no-save @capacitor/cli @capacitor/core @capacitor/android @capacitor/assets
+2026-09-30T05:43:47.4494895Z [36;1mnpm install --no-save @capacitor/cli @capacitor/core @capacitor/android @capacitor/assets[0m
+2026-09-30T05:43:47.4816719Z shell: /usr/bin/bash -e {0}
+2026-09-30T05:43:47.4817110Z env:
+2026-09-30T05:43:47.4817576Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:43:47.4818367Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:43:47.4818966Z ##[endgroup]
+2026-09-30T05:43:53.5041468Z npm warn deprecated prebuild-install@7.1.3: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+2026-09-30T05:43:54.1614953Z npm warn deprecated tar@6.2.1: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-09-30T05:43:54.2757231Z npm warn deprecated uuid@7.0.3: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+2026-09-30T05:43:54.6323144Z npm warn deprecated glob@9.3.5: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-09-30T05:43:56.1773590Z 
+2026-09-30T05:43:56.1775139Z added 220 packages, and audited 221 packages in 9s
+2026-09-30T05:43:56.1775872Z 
+2026-09-30T05:43:56.1797133Z 32 packages are looking for funding
+2026-09-30T05:43:56.1798266Z   run `npm fund` for details
+2026-09-30T05:43:56.2160464Z 
+2026-09-30T05:43:56.2181380Z 7 vulnerabilities (3 moderate, 3 high, 1 critical)
+2026-09-30T05:43:56.2181859Z 
+2026-09-30T05:43:56.2182291Z To address issues that do not require attention, run:
+2026-09-30T05:43:56.2182833Z   npm audit fix
+2026-09-30T05:43:56.2183053Z 
+2026-09-30T05:43:56.2183386Z Some issues need review, and may require choosing
+2026-09-30T05:43:56.2183968Z a different dependency.
+2026-09-30T05:43:56.2184208Z 
+2026-09-30T05:43:56.2184418Z Run `npm audit` for details.
+2026-09-30T05:43:56.2713326Z ##[group]Run node scripts/prepare-android.mjs
+2026-09-30T05:43:56.2713738Z [36;1mnode scripts/prepare-android.mjs[0m
+2026-09-30T05:43:56.2777533Z shell: /usr/bin/bash -e {0}
+2026-09-30T05:43:56.2777829Z env:
+2026-09-30T05:43:56.2778192Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:43:56.2778798Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:43:56.2779252Z ##[endgroup]
+2026-09-30T05:43:56.3474573Z icons/icon-192.png: 608 bytes
+2026-09-30T05:43:56.3656753Z icons/icon-512.png: 2473 bytes
+2026-09-30T05:43:56.4006882Z assets/icon.png: 7067 bytes
+2026-09-30T05:43:56.5416347Z assets/splash.png: 33686 bytes
+2026-09-30T05:43:56.5417402Z Ikon selesai dibuat.
+2026-09-30T05:44:00.6601438Z www/ siap (data: 93.4 MB → gzip 28.1 MB)
+2026-09-30T05:44:00.6602661Z Menambahkan platform android (sekali saja)…
+2026-09-30T05:44:01.2061279Z ✔ Adding native android project in android in 40.22ms
+2026-09-30T05:44:01.2062159Z ✔ add in 40.93ms
+2026-09-30T05:44:01.2279084Z ✔ Copying web assets from www to android/app/src/main/assets/public in 13.68ms
+2026-09-30T05:44:01.2283865Z ✔ Creating capacitor.config.json in android/app/src/main/assets in 370.63μs
+2026-09-30T05:44:01.2302617Z ✔ copy android in 16.96ms
+2026-09-30T05:44:01.2313516Z ✔ Updating Android plugins in 39.20μs
+2026-09-30T05:44:01.2407220Z ✔ update android in 9.85ms
+2026-09-30T05:44:01.2411829Z ✔ Syncing Gradle in 147.41μs
+2026-09-30T05:44:01.2429678Z [success] android platform added!
+2026-09-30T05:44:01.2431110Z Follow the Developer Workflow guide to get building:
+2026-09-30T05:44:01.2432125Z https://capacitorjs.com/docs/basics/workflow
+2026-09-30T05:44:01.8743008Z [log] xml(load) at /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/AndroidManifest.xml
+2026-09-30T05:44:01.8746747Z [log] xml(load) Found root namespaces in XML file: http://schemas.android.com/apk/res/android
+2026-09-30T05:44:01.9302566Z Generating assets for android
+2026-09-30T05:44:02.9247077Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-ldpi/ic_launcher_foreground.png (1 KB)
+2026-09-30T05:44:02.9249023Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9251121Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9253612Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png (1.45 KB)
+2026-09-30T05:44:02.9256585Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9259111Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9261246Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png (1.87 KB)
+2026-09-30T05:44:02.9263544Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9264901Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9266663Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png (2.66 KB)
+2026-09-30T05:44:02.9268214Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9269443Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9270726Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png (4.25 KB)
+2026-09-30T05:44:02.9271960Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9273249Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9274631Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png (6.69 KB)
+2026-09-30T05:44:02.9276087Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9277513Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9278877Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-ldpi/ic_launcher_background.png (277 B)
+2026-09-30T05:44:02.9280176Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9281473Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9282872Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-mdpi/ic_launcher_background.png (350 B)
+2026-09-30T05:44:02.9284206Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9285497Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9287123Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-hdpi/ic_launcher_background.png (531 B)
+2026-09-30T05:44:02.9288425Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9289987Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9291362Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xhdpi/ic_launcher_background.png (697 B)
+2026-09-30T05:44:02.9292670Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9293943Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9295355Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_background.png (1.02 KB)
+2026-09-30T05:44:02.9296994Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9298489Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9299888Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_background.png (1.69 KB)
+2026-09-30T05:44:02.9301247Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+2026-09-30T05:44:02.9302531Z CREATE android adaptive-icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+2026-09-30T05:44:02.9303797Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-ldpi/ic_launcher.png (537 B)
+2026-09-30T05:44:02.9305000Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-mdpi/ic_launcher.png (730 B)
+2026-09-30T05:44:02.9306334Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-hdpi/ic_launcher.png (1.02 KB)
+2026-09-30T05:44:02.9307546Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png (1.36 KB)
+2026-09-30T05:44:02.9308762Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png (2.11 KB)
+2026-09-30T05:44:02.9309994Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png (2.84 KB)
+2026-09-30T05:44:02.9311198Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-ldpi/ic_launcher_round.png (1.01 KB)
+2026-09-30T05:44:02.9312427Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png (1.28 KB)
+2026-09-30T05:44:02.9313649Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png (1.8 KB)
+2026-09-30T05:44:02.9314900Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png (2.29 KB)
+2026-09-30T05:44:02.9316263Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png (3.39 KB)
+2026-09-30T05:44:02.9317512Z CREATE android icon /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png (4.54 KB)
+2026-09-30T05:44:02.9318883Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable/splash.png (2.69 KB)
+2026-09-30T05:44:02.9320096Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-ldpi/splash.png (1.91 KB)
+2026-09-30T05:44:02.9321331Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-mdpi/splash.png (2.87 KB)
+2026-09-30T05:44:02.9322584Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-hdpi/splash.png (5.08 KB)
+2026-09-30T05:44:02.9323875Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-xhdpi/splash.png (9.47 KB)
+2026-09-30T05:44:02.9325171Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-xxhdpi/splash.png (13.75 KB)
+2026-09-30T05:44:02.9326917Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-xxxhdpi/splash.png (18.79 KB)
+2026-09-30T05:44:02.9328532Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-ldpi/splash.png (1.95 KB)
+2026-09-30T05:44:02.9329807Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-mdpi/splash.png (2.69 KB)
+2026-09-30T05:44:02.9331090Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-hdpi/splash.png (4.73 KB)
+2026-09-30T05:44:02.9391440Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-xhdpi/splash.png (8.61 KB)
+2026-09-30T05:44:02.9392750Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-xxhdpi/splash.png (12.1 KB)
+2026-09-30T05:44:02.9394020Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-xxxhdpi/splash.png (17.97 KB)
+2026-09-30T05:44:02.9395267Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-night/splash.png (2.94 KB)
+2026-09-30T05:44:02.9396944Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-night-ldpi/splash.png (2.94 KB)
+2026-09-30T05:44:02.9398237Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-night-mdpi/splash.png (5.45 KB)
+2026-09-30T05:44:02.9399512Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-night-hdpi/splash.png (11.09 KB)
+2026-09-30T05:44:02.9400898Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-night-xhdpi/splash.png (23.06 KB)
+2026-09-30T05:44:02.9402237Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-night-xxhdpi/splash.png (36.42 KB)
+2026-09-30T05:44:02.9403550Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-night-xxxhdpi/splash.png (54.91 KB)
+2026-09-30T05:44:02.9404833Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-night-ldpi/splash.png (3.13 KB)
+2026-09-30T05:44:02.9406346Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-night-mdpi/splash.png (4.83 KB)
+2026-09-30T05:44:02.9407958Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-night-hdpi/splash.png (11.26 KB)
+2026-09-30T05:44:02.9409262Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-night-xhdpi/splash.png (24.2 KB)
+2026-09-30T05:44:02.9410602Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-night-xxhdpi/splash.png (35.37 KB)
+2026-09-30T05:44:02.9411902Z CREATE android splash-dark /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-night-xxxhdpi/splash.png (54.76 KB)
+2026-09-30T05:44:02.9413088Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable/splash.png (4.75 KB)
+2026-09-30T05:44:02.9414225Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-ldpi/splash.png (2.85 KB)
+2026-09-30T05:44:02.9415391Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-mdpi/splash.png (4.31 KB)
+2026-09-30T05:44:02.9416990Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-hdpi/splash.png (9.46 KB)
+2026-09-30T05:44:02.9418176Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-xhdpi/splash.png (18.78 KB)
+2026-09-30T05:44:02.9419364Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-xxhdpi/splash.png (28.23 KB)
+2026-09-30T05:44:02.9420575Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-land-xxxhdpi/splash.png (43.79 KB)
+2026-09-30T05:44:02.9421771Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-ldpi/splash.png (2.88 KB)
+2026-09-30T05:44:02.9422952Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-mdpi/splash.png (4.75 KB)
+2026-09-30T05:44:02.9424113Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-hdpi/splash.png (9.06 KB)
+2026-09-30T05:44:02.9425278Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-xhdpi/splash.png (20.35 KB)
+2026-09-30T05:44:02.9426708Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-xxhdpi/splash.png (30.11 KB)
+2026-09-30T05:44:02.9427911Z CREATE android splash /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/app/src/main/res/drawable-port-xxxhdpi/splash.png (43.25 KB)
+2026-09-30T05:44:02.9428489Z 
+2026-09-30T05:44:02.9428502Z 
+2026-09-30T05:44:02.9428588Z Totals:
+2026-09-30T05:44:02.9428847Z android: 87 generated, 640.88 KB total
+2026-09-30T05:44:03.3988071Z ✔ Copying web assets from www to android/app/src/main/assets/public in 12.13ms
+2026-09-30T05:44:03.3996805Z ✔ Creating capacitor.config.json in android/app/src/main/assets in 568.73μs
+2026-09-30T05:44:03.4022182Z ✔ copy android in 21.30ms
+2026-09-30T05:44:03.4261658Z assets/data: 0 json digzip in-place (0.0 MB → 0.0 MB), .gz pra-ada: 21
+2026-09-30T05:44:03.4262581Z Siap di-build: cd android && ./gradlew assembleDebug
+2026-09-30T05:44:03.4352631Z ##[group]Run ./gradlew assembleDebug --no-daemon
+2026-09-30T05:44:03.4353021Z [36;1m./gradlew assembleDebug --no-daemon[0m
+2026-09-30T05:44:03.4415571Z shell: /usr/bin/bash -e {0}
+2026-09-30T05:44:03.4416108Z env:
+2026-09-30T05:44:03.4416471Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:44:03.4417252Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:44:03.4417706Z ##[endgroup]
+2026-09-30T05:44:05.0648090Z Downloading https://services.gradle.org/distributions/gradle-8.14.3-all.zip
+2026-09-30T05:44:08.1384656Z .....................10%.....................20%......................30%.....................40%......................50%.....................60%.....................70%......................80%.....................90%......................100%
+2026-09-30T05:44:11.6491254Z 
+2026-09-30T05:44:11.6500242Z Welcome to Gradle 8.14.3!
+2026-09-30T05:44:11.6500570Z 
+2026-09-30T05:44:11.6500955Z Here are the highlights of this release:
+2026-09-30T05:44:11.6501388Z  - Java 24 support
+2026-09-30T05:44:11.6501711Z  - GraalVM Native Image toolchain selection
+2026-09-30T05:44:11.6502074Z  - Enhancements to test reporting
+2026-09-30T05:44:11.6502433Z  - Build Authoring improvements
+2026-09-30T05:44:11.6502616Z 
+2026-09-30T05:44:11.6502942Z For more details see https://docs.gradle.org/8.14.3/release-notes.html
+2026-09-30T05:44:11.6503260Z 
+2026-09-30T05:44:11.7498418Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-09-30T05:44:13.2486720Z Daemon will be stopped at the end of the build 
+2026-09-30T05:44:36.9494796Z 
+2026-09-30T05:44:36.9536244Z > Configure project :app
+2026-09-30T05:44:36.9537711Z WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+2026-09-30T05:44:39.1506658Z 
+2026-09-30T05:44:39.1511115Z > Configure project :capacitor-cordova-android-plugins
+2026-09-30T05:44:39.1517484Z WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+2026-09-30T05:44:40.3485874Z 
+2026-09-30T05:44:40.3497121Z > Task :app:preBuild UP-TO-DATE
+2026-09-30T05:44:40.3498056Z > Task :app:preDebugBuild UP-TO-DATE
+2026-09-30T05:44:40.3499045Z > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+2026-09-30T05:44:40.4486483Z > Task :capacitor-android:preBuild UP-TO-DATE
+2026-09-30T05:44:40.4487597Z > Task :capacitor-android:preDebugBuild UP-TO-DATE
+2026-09-30T05:44:40.4497786Z > Task :capacitor-cordova-android-plugins:preBuild UP-TO-DATE
+2026-09-30T05:44:40.4500209Z > Task :capacitor-cordova-android-plugins:preDebugBuild UP-TO-DATE
+2026-09-30T05:44:40.4500804Z > Task :capacitor-cordova-android-plugins:writeDebugAarMetadata
+2026-09-30T05:44:40.4501273Z > Task :capacitor-android:writeDebugAarMetadata
+2026-09-30T05:44:40.4501639Z > Task :app:javaPreCompileDebug
+2026-09-30T05:44:40.5507271Z > Task :capacitor-android:processDebugNavigationResources
+2026-09-30T05:44:43.7495122Z > Task :capacitor-cordova-android-plugins:processDebugNavigationResources
+2026-09-30T05:44:43.8487895Z > Task :app:checkDebugAarMetadata
+2026-09-30T05:44:43.8489309Z > Task :app:processDebugNavigationResources
+2026-09-30T05:44:44.1500082Z > Task :app:generateDebugResValues
+2026-09-30T05:44:44.1515179Z > Task :app:compileDebugNavigationResources
+2026-09-30T05:44:44.1524207Z > Task :capacitor-android:generateDebugResValues
+2026-09-30T05:44:44.1525278Z > Task :capacitor-android:generateDebugResources
+2026-09-30T05:44:44.2527248Z > Task :capacitor-android:packageDebugResources
+2026-09-30T05:44:44.2528552Z > Task :capacitor-cordova-android-plugins:generateDebugResValues
+2026-09-30T05:44:44.2529670Z > Task :capacitor-cordova-android-plugins:generateDebugResources
+2026-09-30T05:44:44.2556936Z > Task :capacitor-cordova-android-plugins:packageDebugResources
+2026-09-30T05:44:44.2558347Z > Task :app:mapDebugSourceSetPaths
+2026-09-30T05:44:44.2559205Z > Task :app:generateDebugResources
+2026-09-30T05:44:44.9485331Z > Task :app:packageDebugResources
+2026-09-30T05:44:45.6485001Z > Task :app:mergeDebugResources
+2026-09-30T05:44:46.0530619Z > Task :app:createDebugCompatibleScreenManifests
+2026-09-30T05:44:46.0567285Z > Task :app:extractDeepLinksDebug
+2026-09-30T05:44:46.0616701Z > Task :capacitor-android:extractDeepLinksDebug
+2026-09-30T05:44:46.0650937Z > Task :capacitor-cordova-android-plugins:extractDeepLinksDebug
+2026-09-30T05:44:46.1497174Z > Task :capacitor-android:compileDebugLibraryResources
+2026-09-30T05:44:46.1524741Z > Task :capacitor-android:processDebugManifest
+2026-09-30T05:44:46.1526080Z > Task :capacitor-cordova-android-plugins:processDebugManifest
+2026-09-30T05:44:46.1527159Z > Task :capacitor-cordova-android-plugins:compileDebugLibraryResources
+2026-09-30T05:44:46.1528049Z > Task :app:parseDebugLocalResources
+2026-09-30T05:44:46.1528761Z > Task :capacitor-android:parseDebugLocalResources
+2026-09-30T05:44:46.3486469Z > Task :app:processDebugMainManifest
+2026-09-30T05:44:46.5489363Z > Task :app:processDebugManifest
+2026-09-30T05:44:46.5490146Z > Task :app:processDebugManifestForPackage
+2026-09-30T05:44:46.5491327Z > Task :capacitor-android:javaPreCompileDebug
+2026-09-30T05:44:46.5492506Z > Task :capacitor-cordova-android-plugins:javaPreCompileDebug
+2026-09-30T05:44:46.6486316Z > Task :capacitor-cordova-android-plugins:parseDebugLocalResources
+2026-09-30T05:44:46.6490238Z > Task :app:mergeDebugShaders
+2026-09-30T05:44:46.6491072Z > Task :capacitor-android:generateDebugRFile
+2026-09-30T05:44:46.6492171Z > Task :capacitor-cordova-android-plugins:generateDebugRFile
+2026-09-30T05:44:52.3484770Z 
+2026-09-30T05:44:52.3488033Z Note: Some input files use unchecked or unsafe operations.
+2026-09-30T05:44:52.3488866Z > Task :capacitor-android:compileDebugJavaWithJavac
+2026-09-30T05:44:52.3489625Z Note: Recompile with -Xlint:unchecked for details.
+2026-09-30T05:44:54.8506379Z 
+2026-09-30T05:44:54.8567156Z > Task :capacitor-cordova-android-plugins:compileDebugJavaWithJavac NO-SOURCE
+2026-09-30T05:44:54.8591079Z > Task :app:compileDebugShaders NO-SOURCE
+2026-09-30T05:44:54.8606569Z > Task :app:generateDebugAssets UP-TO-DATE
+2026-09-30T05:44:54.8636656Z > Task :capacitor-cordova-android-plugins:bundleLibCompileToJarDebug
+2026-09-30T05:44:54.8643565Z > Task :capacitor-android:mergeDebugShaders
+2026-09-30T05:44:54.8678492Z > Task :capacitor-android:compileDebugShaders NO-SOURCE
+2026-09-30T05:44:54.8696620Z > Task :capacitor-android:generateDebugAssets UP-TO-DATE
+2026-09-30T05:44:54.8726840Z > Task :capacitor-android:bundleLibCompileToJarDebug
+2026-09-30T05:44:54.8732766Z > Task :capacitor-android:mergeDebugAssets
+2026-09-30T05:44:54.8756652Z > Task :capacitor-cordova-android-plugins:mergeDebugShaders
+2026-09-30T05:44:54.8784778Z > Task :capacitor-cordova-android-plugins:compileDebugShaders NO-SOURCE
+2026-09-30T05:44:54.8816941Z > Task :capacitor-cordova-android-plugins:generateDebugAssets UP-TO-DATE
+2026-09-30T05:44:54.9485987Z > Task :capacitor-cordova-android-plugins:mergeDebugAssets
+2026-09-30T05:44:55.4484943Z > Task :app:mergeDebugAssets
+2026-09-30T05:44:55.4486259Z > Task :app:processDebugResources
+2026-09-30T05:44:56.2507026Z > Task :app:compressDebugAssets
+2026-09-30T05:44:56.3497565Z > Task :app:compileDebugJavaWithJavac
+2026-09-30T05:44:56.3498973Z > Task :capacitor-android:bundleLibRuntimeToJarDebug
+2026-09-30T05:44:56.3515174Z > Task :capacitor-cordova-android-plugins:bundleLibRuntimeToJarDebug
+2026-09-30T05:44:56.3516510Z > Task :app:desugarDebugFileDependencies
+2026-09-30T05:44:57.4506981Z > Task :app:dexBuilderDebug
+2026-09-30T05:44:57.4530083Z > Task :app:processDebugJavaRes NO-SOURCE
+2026-09-30T05:44:57.4531078Z > Task :capacitor-android:processDebugJavaRes NO-SOURCE
+2026-09-30T05:44:57.4532269Z > Task :capacitor-cordova-android-plugins:processDebugJavaRes NO-SOURCE
+2026-09-30T05:44:58.3507116Z > Task :app:checkDebugDuplicateClasses
+2026-09-30T05:44:58.5507100Z > Task :app:mergeDebugJavaResource
+2026-09-30T05:44:58.5537236Z > Task :capacitor-android:bundleLibRuntimeToDirDebug
+2026-09-30T05:45:17.0530157Z > Task :capacitor-cordova-android-plugins:bundleLibRuntimeToDirDebug
+2026-09-30T05:45:17.0646942Z > Task :app:mergeDebugGlobalSynthetics
+2026-09-30T05:45:17.1486901Z > Task :app:mergeDebugJniLibFolders
+2026-09-30T05:45:17.1487967Z > Task :capacitor-android:mergeDebugJniLibFolders
+2026-09-30T05:45:17.1489172Z > Task :capacitor-android:mergeDebugNativeLibs NO-SOURCE
+2026-09-30T05:45:17.1489954Z > Task :capacitor-android:copyDebugJniLibsProjectOnly
+2026-09-30T05:45:17.1490648Z > Task :app:mergeProjectDexDebug
+2026-09-30T05:45:17.2497026Z > Task :capacitor-cordova-android-plugins:mergeDebugJniLibFolders
+2026-09-30T05:45:17.2514269Z > Task :capacitor-cordova-android-plugins:mergeDebugNativeLibs NO-SOURCE
+2026-09-30T05:45:17.2546487Z > Task :capacitor-cordova-android-plugins:copyDebugJniLibsProjectOnly
+2026-09-30T05:45:19.5496722Z > Task :app:mergeExtDexDebug
+2026-09-30T05:45:19.8498379Z > Task :app:validateSigningDebug
+2026-09-30T05:45:20.0497027Z > Task :app:mergeLibDexDebug
+2026-09-30T05:45:20.0516829Z > Task :app:mergeDebugNativeLibs NO-SOURCE
+2026-09-30T05:45:20.0519293Z > Task :app:stripDebugDebugSymbols NO-SOURCE
+2026-09-30T05:45:20.0520177Z > Task :app:writeDebugAppMetadata
+2026-09-30T05:45:20.0521057Z > Task :app:writeDebugSigningConfigVersions
+2026-09-30T05:45:20.1491498Z > Task :capacitor-android:stripDebugDebugSymbols NO-SOURCE
+2026-09-30T05:45:20.1524415Z > Task :capacitor-android:checkDebugAarMetadata
+2026-09-30T05:45:20.1556653Z > Task :capacitor-android:copyDebugJniLibsProjectAndLocalJars
+2026-09-30T05:45:24.5509521Z > Task :capacitor-android:extractDebugAnnotations
+2026-09-30T05:45:24.5546979Z > Task :capacitor-android:extractDeepLinksForAarDebug
+2026-09-30T05:45:24.5566850Z > Task :capacitor-android:mergeDebugGeneratedProguardFiles
+2026-09-30T05:45:24.5567776Z > Task :capacitor-android:mergeDebugConsumerProguardFiles
+2026-09-30T05:45:24.5575603Z > Task :capacitor-android:prepareDebugArtProfile
+2026-09-30T05:45:24.6509010Z > Task :capacitor-android:prepareLintJarForPublish
+2026-09-30T05:45:24.6510066Z > Task :capacitor-android:mergeDebugJavaResource
+2026-09-30T05:45:25.6487060Z > Task :capacitor-cordova-android-plugins:checkDebugAarMetadata
+2026-09-30T05:45:25.6488736Z > Task :capacitor-android:syncDebugLibJars
+2026-09-30T05:45:25.7485158Z > Task :capacitor-android:bundleDebugAar
+2026-09-30T05:45:25.7490161Z > Task :app:packageDebug
+2026-09-30T05:45:25.7491233Z > Task :app:createDebugApkListingFileRedirect
+2026-09-30T05:45:25.7492017Z > Task :app:assembleDebug
+2026-09-30T05:45:25.7492733Z > Task :capacitor-android:assembleDebug
+2026-09-30T05:45:25.7493796Z > Task :capacitor-cordova-android-plugins:stripDebugDebugSymbols NO-SOURCE
+2026-09-30T05:45:25.7495175Z > Task :capacitor-cordova-android-plugins:copyDebugJniLibsProjectAndLocalJars
+2026-09-30T05:45:26.1492996Z > Task :capacitor-cordova-android-plugins:extractDebugAnnotations
+2026-09-30T05:45:26.1500491Z > Task :capacitor-cordova-android-plugins:extractDeepLinksForAarDebug
+2026-09-30T05:45:26.1502027Z > Task :capacitor-cordova-android-plugins:mergeDebugGeneratedProguardFiles
+2026-09-30T05:45:26.1503372Z > Task :capacitor-cordova-android-plugins:mergeDebugConsumerProguardFiles
+2026-09-30T05:45:26.1504648Z > Task :capacitor-cordova-android-plugins:prepareDebugArtProfile
+2026-09-30T05:45:26.1506251Z > Task :capacitor-cordova-android-plugins:prepareLintJarForPublish
+2026-09-30T05:45:26.1507517Z > Task :capacitor-cordova-android-plugins:mergeDebugJavaResource
+2026-09-30T05:45:26.1508626Z > Task :capacitor-cordova-android-plugins:syncDebugLibJars
+2026-09-30T05:45:26.1509699Z > Task :capacitor-cordova-android-plugins:bundleDebugAar
+2026-09-30T05:45:26.1510727Z > Task :capacitor-cordova-android-plugins:assembleDebug
+2026-09-30T05:45:26.1511356Z 
+2026-09-30T05:45:26.1512875Z [Incubating] Problems report is available at: file:///home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook/android/build/reports/problems/problems-report.html
+2026-09-30T05:45:26.1514293Z 
+2026-09-30T05:45:26.1515172Z BUILD SUCCESSFUL in 1m 21s
+2026-09-30T05:45:26.1516775Z 93 actionable tasks: 93 executed
+2026-09-30T05:45:26.3105522Z ##[group]Run APK=android/app/build/outputs/apk/debug/app-debug.apk
+2026-09-30T05:45:26.3106407Z [36;1mAPK=android/app/build/outputs/apk/debug/app-debug.apk[0m
+2026-09-30T05:45:26.3106881Z [36;1mRAW=$(unzip -l "$APK" | grep -cE "assets/public/data/.*\.json$" || true)[0m
+2026-09-30T05:45:26.3107628Z [36;1mGZ=$(unzip -l "$APK" | grep -c "\.json\.gz" || true)[0m
+2026-09-30T05:45:26.3107984Z [36;1mecho "JSON mentah: $RAW | gzip: $GZ"[0m
+2026-09-30T05:45:26.3108274Z [36;1mif [ "$RAW" != "0" ]; then[0m
+2026-09-30T05:45:26.3108605Z [36;1m  echo "::error::APK masih berisi JSON mentah ($RAW file)"[0m
+2026-09-30T05:45:26.3108951Z [36;1m  exit 1[0m
+2026-09-30T05:45:26.3109144Z [36;1mfi[0m
+2026-09-30T05:45:26.3109340Z [36;1mif [ "$GZ" -lt 20 ]; then[0m
+2026-09-30T05:45:26.3109651Z [36;1m  echo "::error::Data gzip tidak lengkap ($GZ/21 file)"[0m
+2026-09-30T05:45:26.3109972Z [36;1m  exit 1[0m
+2026-09-30T05:45:26.3110163Z [36;1mfi[0m
+2026-09-30T05:45:26.3172931Z shell: /usr/bin/bash -e {0}
+2026-09-30T05:45:26.3173186Z env:
+2026-09-30T05:45:26.3173505Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:45:26.3174039Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:45:26.3174466Z ##[endgroup]
+2026-09-30T05:45:26.3581072Z JSON mentah: 21 | gzip: 0
+2026-09-30T05:45:26.3584813Z ##[error]APK masih berisi JSON mentah (21 file)
+2026-09-30T05:45:26.3587746Z ##[error]Process completed with exit code 1.
+2026-09-30T05:45:26.3623559Z ##[group]Run ls -lh android/app/build/outputs/apk/debug/app-debug.apk || true
+2026-09-30T05:45:26.3624128Z [36;1mls -lh android/app/build/outputs/apk/debug/app-debug.apk || true[0m
+2026-09-30T05:45:26.3684275Z shell: /usr/bin/bash -e {0}
+2026-09-30T05:45:26.3684544Z env:
+2026-09-30T05:45:26.3684878Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:45:26.3685443Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-09-30T05:45:26.3686154Z ##[endgroup]
+2026-09-30T05:45:26.3778230Z -rw-r--r-- 1 runner runner 39M Sep 30 05:45 android/app/build/outputs/apk/debug/app-debug.apk
+2026-09-30T05:45:26.3896602Z Post job cleanup.
+2026-09-30T05:45:26.5274258Z (node:2756) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-09-30T05:45:26.5275403Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T05:45:26.5554837Z Post job cleanup.
+2026-09-30T05:45:26.6458828Z [command]/usr/bin/git version
+2026-09-30T05:45:26.6503153Z git version 2.55.0
+2026-09-30T05:45:26.6547943Z Temporarily overriding HOME='/home/runner/work/_temp/7870a049-713d-4c9b-a96f-8aca05983e06' before making global git config changes
+2026-09-30T05:45:26.6549417Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-30T05:45:26.6554225Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/perpus_ringkasan_ebook/perpus_ringkasan_ebook
+2026-09-30T05:45:26.6595569Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-30T05:45:26.6632625Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-30T05:45:26.6877899Z fatal: No url found for submodule path 'scratch/ci_repro' in .gitmodules
+2026-09-30T05:45:26.6909356Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+2026-09-30T05:45:26.7041382Z Cleaning up orphan processes
+2026-09-30T05:45:26.7356589Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -33,6 +33,12 @@ jobs:
       - name: Verifikasi APK hanya berisi data gzip
         run: |
           APK=android/app/build/outputs/apk/debug/app-debug.apk
+          echo "--- isi direktori sumber setelah gradle ---"
+          ls android/app/src/main/assets/public/data | head -5
+          echo "--- semua salinan content-0 di workspace ---"
+          find . -name "content-0*" -not -path "./node_modules/*" -not -path "./scratch/ci_repro/*"
+          echo "--- capacitor.build.gradle ---"
+          cat android/app/capacitor.build.gradle 2>/dev/null || true
           RAW=$(unzip -l "$APK" | grep -cE "assets/public/data/.*\.json$" || true)
           GZ=$(unzip -l "$APK" | grep -c "\.json\.gz" || true)
           echo "JSON mentah: $RAW | gzip: $GZ"
