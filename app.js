@@ -22,6 +22,31 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 const SOURCE_LABEL = { f15: 'F15 Library', rofia: 'Rofiatulmaos' };
 const validIds = new Set();
 
+// Loader universal: web mem-bypass file .json; APK (asset gzip, tanpa encoding)
+// jatuh ke file .gz dan membukanya via DecompressionStream.
+async function fetchGzJson(url) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) return await res.json();
+  } catch {}
+  const res = await fetch(url + '.gz');
+  if (!res.ok) throw new Error('gagal memuat ' + url);
+  if (typeof DecompressionStream === 'undefined') {
+    throw new Error('WebView terlalu lama untuk membuka data terkompresi — perbarui Android System WebView');
+  }
+  const buf = await res.arrayBuffer();
+  if (res.headers.get('Content-Encoding') === 'gzip') {
+    const text = await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    return JSON.parse(text);
+  }
+  try {
+    return JSON.parse(new TextDecoder().decode(buf));
+  } catch {
+    const text = await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    return JSON.parse(text);
+  }
+}
+
 // ---------- persistensi status baca ----------
 const persistReading = () => localStorage.setItem('reading', JSON.stringify(state.reading));
 const persistDone = () => localStorage.setItem('done', JSON.stringify(state.done));
@@ -73,8 +98,7 @@ function toast(msg) {
 
 // ---------- init ----------
 async function init() {
-  const res = await fetch('data/index.json');
-  state.index = await res.json();
+  state.index = await fetchGzJson('data/index.json');
   for (const b of state.index.books) validIds.add(b.id);
   const s = state.index.stats;
   $('#stat-line').textContent =
@@ -155,13 +179,23 @@ async function init() {
     { rootMargin: '600px' }
   ).observe($('#sentinel'));
 
-  // tema light/dark
-  $('#theme-toggle').addEventListener('click', () => {
-    const cur = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.dataset.theme = cur;
-    localStorage.setItem('theme', cur);
+  // tema: siklus light → sepia → dark
+  const THEMES = ['light', 'sepia', 'dark'];
+  const THEME_LABEL = { light: 'Terang', sepia: 'Sepia', dark: 'Gelap' };
+  const setTheme = (t) => {
+    document.documentElement.dataset.theme = t;
+    localStorage.setItem('theme', t);
     const m = document.querySelector('meta[name="theme-color"]');
-    if (m) m.content = cur === 'dark' ? '#161514' : '#fbfbfa';
+    if (m) m.content = t === 'dark' ? '#161514' : t === 'sepia' ? '#f4ead8' : '#fbfbfa';
+    const btn = $('#theme-toggle');
+    if (btn) btn.title = `Tema: ${THEME_LABEL[t]} — ketuk untuk ganti`;
+  };
+  setTheme(document.documentElement.dataset.theme || 'light');
+  $('#theme-toggle').addEventListener('click', () => {
+    const cur = document.documentElement.dataset.theme || 'light';
+    const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
+    setTheme(next);
+    toast(`Tema ${THEME_LABEL[next]}`);
   });
 
   // reader
@@ -273,10 +307,9 @@ function renderMore() {
     card.className = 'card' + (doneFlag ? ' is-done' : '');
     card.style.setProperty('--i', i % 12); // stagger halus dalam batch
     card.innerHTML = `
-      <div class="card-source"><span class="badge badge-${b.source}">${SOURCE_LABEL[b.source] || b.source}</span>${b.category ? `<span>· ${esc(b.category)}</span>` : ''}</div>
+      <div class="card-source"><span class="badge badge-${b.source}">${SOURCE_LABEL[b.source] || b.source}</span></div>
       <h3>${highlight(b.title)}</h3>
       ${b.author ? `<p class="card-author">${esc(b.author)}</p>` : ''}
-      <p class="card-excerpt">${highlight(b.excerpt || b.tagline || '')}</p>
       ${progressHtml}
       <div class="card-footer"><span>${b.words.toLocaleString('id-ID')} kata</span><span class="status-label">${label}</span></div>`;
     card.addEventListener('click', () => openReader(b));
@@ -293,8 +326,7 @@ function renderMore() {
 // ---------- konten ----------
 async function loadChunk(n) {
   if (state.contentCache.has(n)) return state.contentCache.get(n);
-  const res = await fetch(`data/content-${n}.json`);
-  const obj = await res.json();
+  const obj = await fetchGzJson(`data/content-${n}.json`);
   state.contentCache.set(n, obj);
   return obj;
 }

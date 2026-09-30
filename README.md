@@ -28,10 +28,11 @@ Semua status baca (progress, selesai, tema, ukuran huruf) tersimpan di **localSt
 - Pencarian instan judul/penulis + **pencarian isi penuh** (centang "telusuri isi" — 11 juta kata)
 - Filter sumber & 15 kategori, urutkan judul/terpanjang
 - **Pelacak baca**: tab `Semua / Dibaca / Selesai`, progress otomatis saat scroll, tombol tandai selesai
-- **Tema terang/gelap minimalis** (mengikuti preferensi sistem, bisa diganti, tersimpan)
+- **Tema terang/sepia/gelap minimalis** (siklus lewat tombol; awal mengikuti preferensi sistem, tersimpan; kontras WCAG AA)
 - Tipografi editorial serif untuk isi buku; UI monokrom hangat dengan aksen pastel
 - Grid mobile 2 kolom, target sentuh 44px, safe-area untuk notch
 - PWA installable (standalone, portrait, ikon maskable) + APK Android via Capacitor
+- Data APK terkompresi gzip (93 MB → 28 MB), dibuka langsung via DecompressionStream
 
 ## Struktur
 

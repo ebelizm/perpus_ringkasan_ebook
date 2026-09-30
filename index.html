@@ -13,10 +13,12 @@
     // tema diterapkan sebelum render agar tidak kedip
     (function () {
       var t = localStorage.getItem('theme');
-      if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      if (t !== 'light' && t !== 'sepia' && t !== 'dark') {
+        t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
       document.documentElement.dataset.theme = t;
       var m = document.querySelector('meta[name="theme-color"]');
-      if (m) m.content = t === 'dark' ? '#161514' : '#fbfbfa';
+      if (m) m.content = t === 'dark' ? '#161514' : t === 'sepia' ? '#f4ead8' : '#fbfbfa';
     })();
   </script>
 </head>
@@ -42,9 +44,10 @@
         <input type="checkbox" id="full-search" />
         <span>telusuri isi</span>
       </label>
-      <button class="theme-btn" id="theme-toggle" title="Ganti tema terang/gelap" aria-label="Ganti tema">
+      <button class="theme-btn" id="theme-toggle" title="Ganti tema" aria-label="Ganti tema">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="icon-sepia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path><path d="M12 8v.01M12 16v.01"></path></svg>
       </button>
     </div>
   </header>
@@ -56,14 +59,16 @@
         <button class="seg-btn" data-tab="reading">Dibaca <span id="count-reading"></span></button>
         <button class="seg-btn" data-tab="done">Selesai <span id="count-done"></span></button>
       </div>
-      <div class="chips" id="source-chips"></div>
-      <select id="category-select" title="Filter kategori">
-        <option value="">Semua kategori</option>
-      </select>
-      <select id="sort-select" title="Urutkan">
-        <option value="title">Judul A–Z</option>
-        <option value="words">Terpanjang</option>
-      </select>
+      <div class="filter-controls">
+        <div class="chips" id="source-chips"></div>
+        <select id="category-select" title="Filter kategori">
+          <option value="">Semua kategori</option>
+        </select>
+        <select id="sort-select" title="Urutkan">
+          <option value="title">Judul A–Z</option>
+          <option value="words">Terpanjang</option>
+        </select>
+      </div>
     </div>
   </nav>
 

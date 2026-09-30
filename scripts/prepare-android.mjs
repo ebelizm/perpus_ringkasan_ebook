@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 // 0. Generate ikon + splash (assets/icon.png, assets/splash.png, icons/)
 execSync('node scratch/gen_icons.mjs', { stdio: 'inherit' });
 
-// 1. Salin web app + semua data ke www/
+// 1. Salin web app ke www/; data JSON di-gzip (APK jauh lebih kecil, app membuka .gz langsung)
 fs.rmSync('www', { recursive: true, force: true });
 fs.mkdirSync('www', { recursive: true });
 for (const f of ['index.html', 'app.js', 'style.css', 'sw.js', 'manifest.webmanifest']) {
@@ -13,8 +13,18 @@ for (const f of ['index.html', 'app.js', 'style.css', 'sw.js', 'manifest.webmani
 }
 fs.cpSync('icons', 'www/icons', { recursive: true });
 fs.cpSync('data', 'www/data', { recursive: true });
-const totalMB = fs.readdirSync('www/data').reduce((n, f) => n + fs.statSync(`www/data/${f}`).size, 0) / 1048576;
-console.log(`www/ siap (data: ${totalMB.toFixed(1)} MB)`);
+const { gzipSync } = await import('node:zlib');
+let rawMB = 0, gzMB = 0;
+for (const f of fs.readdirSync('www/data')) {
+  if (!f.endsWith('.json')) continue;
+  const p = `www/data/${f}`;
+  const raw = fs.readFileSync(p);
+  const gz = gzipSync(raw, { level: 9 });
+  fs.writeFileSync(p + '.gz', gz);
+  fs.unlinkSync(p); // app membuka file .gz langsung (fetch + DecompressionStream)
+  rawMB += raw.length; gzMB += gz.length;
+}
+console.log(`www/ siap (data: ${(rawMB / 1048576).toFixed(1)} MB → gzip ${(gzMB / 1048576).toFixed(1)} MB)`);
 
 // 2. Generate project android jika belum ada
 if (!fs.existsSync('android')) {
