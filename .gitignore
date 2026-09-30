@@ -17,3 +17,4 @@ scratch/dom*.html
 scratch/dom*_err.txt
 scratch/f15_log.txt
 scratch/rofia_log.txt
+scratch/ci_repro/
