@@ -40,5 +40,7 @@ try {
 }
 
 // 3. Salin aset web ke project android
+// hapus aset lama dulu — cap copy tidak membersihkan tujuan (file basi menumpuk)
+fs.rmSync('android/app/src/main/assets/public', { recursive: true, force: true });
 execSync('npx cap copy android', { stdio: 'inherit' });
 console.log('Siap di-build: cd android && ./gradlew assembleDebug');
