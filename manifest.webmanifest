@@ -8,8 +8,8 @@
   "display": "standalone",
   "display_override": ["standalone"],
   "orientation": "portrait",
-  "background_color": "#0f1115",
-  "theme_color": "#0f1115",
+  "background_color": "#fbfbfa",
+  "theme_color": "#fbfbfa",
   "lang": "id",
   "categories": ["books", "education"],
   "icons": [

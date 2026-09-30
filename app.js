@@ -65,6 +65,7 @@ let toastTimer;
 function toast(msg) {
   const t = $('#toast');
   t.textContent = msg;
+  t.classList.remove('hidden');
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
@@ -153,6 +154,15 @@ async function init() {
     (entries) => { if (entries[0].isIntersecting) renderMore(); },
     { rootMargin: '600px' }
   ).observe($('#sentinel'));
+
+  // tema light/dark
+  $('#theme-toggle').addEventListener('click', () => {
+    const cur = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = cur;
+    localStorage.setItem('theme', cur);
+    const m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.content = cur === 'dark' ? '#161514' : '#fbfbfa';
+  });
 
   // reader
   document.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeReader));
@@ -261,6 +271,7 @@ function renderMore() {
     const label = doneFlag ? '✓ Selesai' : pct > 0 ? `Dibaca ${pct}%` : '';
     const card = document.createElement('div');
     card.className = 'card' + (doneFlag ? ' is-done' : '');
+    card.style.setProperty('--i', i % 12); // stagger halus dalam batch
     card.innerHTML = `
       <div class="card-source"><span class="badge badge-${b.source}">${SOURCE_LABEL[b.source] || b.source}</span>${b.category ? `<span>· ${esc(b.category)}</span>` : ''}</div>
       <h3>${highlight(b.title)}</h3>

@@ -1,5 +1,5 @@
 // Service worker: cache-first agar aplikasi berfungsi 100% offline
-const CACHE = 'perpustakaan-v2';
+const CACHE = 'perpustakaan-v3';
 const CORE = [
   './',
   './index.html',

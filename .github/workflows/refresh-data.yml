@@ -1,0 +1,40 @@
+name: Weekly Data Refresh
+
+on:
+  schedule:
+    - cron: '0 2 * * 1' # tiap Senin 02:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Refresh data dari sumber
+        run: node scratch/refresh_data.mjs
+
+      - name: Commit perubahan data (jika ada)
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ -n "$(git status --porcelain -- data/ scratch/f15_books.json scratch/rofia_books.json scratch/rofia_books_raw.json scratch/category_map.json scratch/refresh_state.json)" ]]; then
+            git add data/ scratch/f15_books.json scratch/rofia_books.json scratch/rofia_books_raw.json scratch/category_map.json scratch/refresh_state.json
+            git commit -m "Refresh data mingguan dari sumber"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Tidak ada perubahan data."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Push (memicu build APK otomatis)
+        if: steps.commit.outputs.changed == 'true'
+        run: git push

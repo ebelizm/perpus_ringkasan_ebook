@@ -1,13 +1,13 @@
-# 📚 Perpustakaan Ringkasan Buku — Offline (PWA)
+# Perpustakaan Ringkasan Buku — Offline (PWA + Android)
 
-Aplikasi web offline berisi **4.948 ringkasan buku (±7,1 juta kata)** dari dua situs:
+Aplikasi web offline berisi **4.879 ringkasan buku (±11,3 juta kata)** dari dua situs:
 
 | Sumber | Jumlah | Format |
 |---|---|---|
 | [f15library.com](https://www.f15library.com/books) | 3.472 ringkasan | Judul + penulis + tagline + 14 kategori + isi lengkap (ID) |
-| [rofiatulmaos.com](https://rofiatulmaos.com/buku/) | 1.476 artikel | Artikel ringkasan/tema buku via WordPress REST API |
+| [rofiatulmaos.com](https://rofiatulmaos.com/buku/) | 1.407 ringkasan | Artikel ringkasan/tema buku via WordPress REST API (artikel per-bagian sudah dilebur ke buku induk) |
 
-## 🚀 Cara Menjalankan
+## Cara Menjalankan
 
 ```bash
 node server.mjs        # atau: npm start
@@ -15,53 +15,53 @@ node server.mjs        # atau: npm start
 
 Buka **http://localhost:5173**.
 
-## 📲 Instalasi di Android (PWA)
+## Instalasi di Android
 
-1. Sambungkan HP dan komputer ke jaringan yang sama, lalu jalankan server dengan akses LAN:
-   ```bash
-   node server.mjs
-   ```
-   Server mendengarkan di semua interface — cari IP komputer (mis. `192.168.1.10`).
-2. Di Chrome Android, buka `http://<IP-KOMPUTER>:5173`
-3. Ketuk **⋮ → Tambahkan ke layar utama** (atau banner "Install app")
-4. Selesai — aplikasi muncul sebagai ikon 📚, berjalan fullscreen tanpa address bar, 100% offline
+**Cara 1 — APK** (disarankan): unduh `PerpustakaanRingkasan-debug.apk` dari [artifact GitHub Actions](https://github.com/ebelizm/perpus_ringkasan_ebook/actions) atau salin file yang sudah diunduh, lalu install (izinkan "sumber tidak dikenal").
 
-> Alternatif: jalankan server langsung di HP dengan Termux (`node server.mjs`) agar tidak perlu PC.
+**Cara 2 — PWA**: jalankan `node server.mjs`, buka `http://<IP-KOMPUTER>:5173` dari Chrome Android, ketuk **⋮ → Tambahkan ke layar utama**.
 
-Data status baca (progress, selesai, ukuran huruf) tersimpan di **localStorage** perangkat — tidak ada server, tidak ada akun.
+Semua status baca (progress, selesai, tema, ukuran huruf) tersimpan di **localStorage** perangkat — tanpa server, tanpa akun, 100% offline.
 
-## ✨ Fitur
+## Fitur
 
-- 🔍 Pencarian instan judul/penulis + **pencarian isi penuh** (centang "telusuri isi")
-- 🏷️ Filter sumber & 15 kategori, urutkan judul/terpanjang
-- 📖 **Pelacak baca**: tab `Semua / Dibaca / Selesai`, progress bar otomatis saat scroll, tombol "✓ Tandai selesai"
-- 📱 UI mobile-minimalis: grid 2 kolom, target sentuh 44px, safe-area untuk notch, tanpa elemen ramai
-- 🔠 Ukuran huruf bisa diatur
-- 📲 PWA installable (standalone, portrait, ikon maskable)
+- Pencarian instan judul/penulis + **pencarian isi penuh** (centang "telusuri isi" — 11 juta kata)
+- Filter sumber & 15 kategori, urutkan judul/terpanjang
+- **Pelacak baca**: tab `Semua / Dibaca / Selesai`, progress otomatis saat scroll, tombol tandai selesai
+- **Tema terang/gelap minimalis** (mengikuti preferensi sistem, bisa diganti, tersimpan)
+- Tipografi editorial serif untuk isi buku; UI monokrom hangat dengan aksen pastel
+- Grid mobile 2 kolom, target sentuh 44px, safe-area untuk notch
+- PWA installable (standalone, portrait, ikon maskable) + APK Android via Capacitor
 
-## 📁 Struktur
+## Struktur
 
 ```
-index.html            # UI
+index.html            # UI (ikon SVG, toggle tema)
 app.js                # logika + tracking baca (localStorage)
-style.css             # tema gelap mobile-first
-sw.js                 # service worker (cache-first, v2)
+style.css             # palet light/dark monokrom hangat (data-theme)
+sw.js                 # service worker (cache-first, v3)
 manifest.webmanifest  # manifest PWA
-icons/                # ikon PWA (192/512, dibuat via scratch/gen_icons.mjs)
+icons/                # ikon PWA (192/512)
 data/
-  index.json          # metadata 4.948 buku (~1,9 MB)
-  content-0..19.json  # isi lengkap per 250 buku (~2-3 MB/chunk)
+  index.json          # metadata semua buku (~2 MB)
+  content-0..19.json  # isi lengkap per 250 buku
 server.mjs            # server statis tanpa dependensi
-scratch/              # scraper, builder, generator ikon
+scripts/prepare-android.mjs  # siapkan project Capacitor + ikon native
+scratch/              # scraper, builder, refresh incremental
 ```
 
-## 🔄 Memperbarui Data
+## Memperbarui Data
+
+**Otomatis (disarankan):** workflow **Weekly Data Refresh** (`.github/workflows/refresh-data.yml`) berjalan tiap Senin 02:00 UTC — mengambil buku baru dari sitemap F15 + artikel baru/berubah dari WP API Rofia (incremental), recheck rotasi 5% katalog F15 per pekan, lalu commit + push yang otomatis memicu build APK baru.
+
+**Manual:**
 
 ```bash
-npm run scrape:f15     # ambil ulang dari f15library.com (~10-15 menit)
-npm run scrape:rofia   # ambil ulang dari rofiatulmaos.com (~1 menit)
-npm run build:data     # gabungkan → folder data/
-node scratch/fix_categories.mjs   # (opsional) perbaiki pemetaan kategori F15
+node scratch/refresh_data.mjs   # incremental + rebuild data/ (buku baru + perubahan konten)
+# atau lengkap dari nol:
+npm run scrape:f15 && npm run scrape:rofia && node scratch/merge_parts.mjs && npm run build:data
 ```
 
-Scraper F15 punya checkpoint sehingga bisa dihentikan dan dilanjutkan.
+## Build APK
+
+Push ke `main` memicu workflow **Build APK** (`.github/workflows/build-apk.yml`); hasilnya ada di tab Actions sebagai artifact `perpustakaan-ringkasan-apk`.

@@ -1,33 +1,51 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0f1115" />
+  <meta name="theme-color" content="#fbfbfa" />
   <title>Perpustakaan Ringkasan Buku — Offline</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <script>
+    // tema diterapkan sebelum render agar tidak kedip
+    (function () {
+      var t = localStorage.getItem('theme');
+      if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = t;
+      var m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.content = t === 'dark' ? '#161514' : '#fbfbfa';
+    })();
+  </script>
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand">
-        <span class="brand-icon">📚</span>
+        <span class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </span>
         <div>
           <h1>Perpustakaan Ringkasan</h1>
           <p id="stat-line">Memuat data…</p>
         </div>
       </div>
       <div class="search-wrap">
-        <span class="search-icon">🔍</span>
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        </span>
         <input id="search" type="search" placeholder="Cari judul, penulis…" autocomplete="off" enterkeyhint="search" />
       </div>
       <label class="full-check">
         <input type="checkbox" id="full-search" />
         <span>telusuri isi</span>
       </label>
+      <button class="theme-btn" id="theme-toggle" title="Ganti tema terang/gelap" aria-label="Ganti tema">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+      </button>
     </div>
   </header>
 
@@ -58,7 +76,9 @@
     <div class="reader-backdrop" data-close></div>
     <div class="reader-panel">
       <header class="reader-head">
-        <button class="icon-btn" data-close title="Tutup (Esc)">✕</button>
+        <button class="icon-btn" data-close title="Tutup (Esc)">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+        </button>
         <div class="reader-head-info">
           <h2 id="reader-title"></h2>
           <p id="reader-meta"></p>
