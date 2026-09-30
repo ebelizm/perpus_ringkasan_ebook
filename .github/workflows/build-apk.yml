@@ -30,6 +30,21 @@ jobs:
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon
 
+      - name: Verifikasi APK hanya berisi data gzip
+        run: |
+          APK=android/app/build/outputs/apk/debug/app-debug.apk
+          RAW=$(unzip -l "$APK" | grep -cE "assets/public/data/.*\.json$" || true)
+          GZ=$(unzip -l "$APK" | grep -c "\.json\.gz" || true)
+          echo "JSON mentah: $RAW | gzip: $GZ"
+          if [ "$RAW" != "0" ]; then
+            echo "::error::APK masih berisi JSON mentah ($RAW file)"
+            exit 1
+          fi
+          if [ "$GZ" -lt 20 ]; then
+            echo "::error::Data gzip tidak lengkap ($GZ/21 file)"
+            exit 1
+          fi
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
