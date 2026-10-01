@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
@@ -30,26 +30,27 @@ jobs:
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon
 
-      - name: Verifikasi APK hanya berisi data gzip
+      # Catatan: AAPT2 menghapus ekstensi .gz saat packaging (Capacitor #5844),
+      # jadi content-N.json.gz menjadi content-N.json di APK — isinya tetap gzip.
+      # Verifikasi lewat magic bytes (1f 8b), bukan nama file.
+      - name: Verifikasi APK berisi data gzip
         run: |
           APK=android/app/build/outputs/apk/debug/app-debug.apk
-          echo "--- isi direktori sumber setelah gradle ---"
-          ls android/app/src/main/assets/public/data | head -5
-          echo "--- semua salinan content-0 di workspace ---"
-          find . -name "content-0*" -not -path "./node_modules/*" -not -path "./scratch/ci_repro/*"
-          echo "--- capacitor.build.gradle ---"
-          cat android/app/capacitor.build.gradle 2>/dev/null || true
-          RAW=$(unzip -l "$APK" | grep -cE "assets/public/data/.*\.json$" || true)
-          GZ=$(unzip -l "$APK" | grep -c "\.json\.gz" || true)
-          echo "JSON mentah: $RAW | gzip: $GZ"
-          if [ "$RAW" != "0" ]; then
-            echo "::error::APK masih berisi JSON mentah ($RAW file)"
+          test -f "$APK"
+          GZ=$(unzip -l "$APK" | grep -cE "assets/public/data/.*\.json$" || true)
+          echo "File data di APK: $GZ"
+          if [ "$GZ" -lt 21 ]; then
+            echo "::error::Data tidak lengkap ($GZ/21 file)"
             exit 1
           fi
-          if [ "$GZ" -lt 20 ]; then
-            echo "::error::Data gzip tidak lengkap ($GZ/21 file)"
-            exit 1
-          fi
+          for f in index content-0 content-19; do
+            MAGIC=$(unzip -p "$APK" "assets/public/data/$f.json" | head -c 2 | od -An -tx1 | tr -d ' \n')
+            echo "$f.json magic: $MAGIC"
+            if [ "$MAGIC" != "1f8b" ]; then
+              echo "::error::$f.json tidak berisi gzip (magic=$MAGIC)"
+              exit 1
+            fi
+          done
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

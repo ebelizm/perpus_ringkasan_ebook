@@ -165,7 +165,9 @@
 
   <script src="app.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
+    // SW hanya untuk web — di APK semua aset sudah lokal (dan AAPT2 men-strip .gz,
+    // sehingga pre-cache ./data/index.json.gz pasti 404 dan install SW gagal)
+    if ('serviceWorker' in navigator && !window.Capacitor) {
       window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
     }
   </script>

@@ -61,9 +61,11 @@ const validIds = new Set();
 
 // Loader data: file disimpan sebagai .json.gz.
 // - Web (server.mjs): Content-Encoding gzip → fetch() mendekode otomatis
-// - APK (asset tanpa Content-Encoding): dekode manual via DecompressionStream
+// - APK: AAPT2 menghapus ekstensi .gz saat packaging (Capacitor #5844),
+//   jadi di native fetch ke .json (isi tetap gzip) → dekode via DecompressionStream
+const IS_NATIVE = !!window.Capacitor;
 async function fetchGzJson(url) {
-  const res = await fetch(url + '.json.gz');
+  const res = await fetch(url + (IS_NATIVE ? '.json' : '.json.gz'));
   if (!res.ok) throw new Error('gagal memuat ' + url);
   if (res.headers.get('Content-Encoding') === 'gzip') return await res.json();
   if (typeof DecompressionStream === 'undefined') {
@@ -183,7 +185,7 @@ function toast(msg) {
 // ---------- init ----------
 async function init() {
   showSkeletons(8);
-  state.index = await fetchGzJson('data/index'); // → data/index.json.gz
+  state.index = await fetchGzJson('data/index'); // → data/index.json.gz (web) / .json di APK
   for (const b of state.index.books) validIds.add(b.id);
   const s = state.index.stats;
   $('#stat-line').textContent =
@@ -494,7 +496,7 @@ function renderMore() {
 // ---------- konten ----------
 async function loadChunk(n) {
   if (state.contentCache.has(n)) return state.contentCache.get(n);
-  const obj = await fetchGzJson(`data/content-${n}`); // → data/content-N.json.gz
+  const obj = await fetchGzJson(`data/content-${n}`); // → data/content-N.json.gz (web) / .json di APK
   state.contentCache.set(n, obj);
   return obj;
 }
