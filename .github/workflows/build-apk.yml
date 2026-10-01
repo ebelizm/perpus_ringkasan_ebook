@@ -30,24 +30,30 @@ jobs:
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon
 
-      # Catatan: AAPT2 menghapus ekstensi .gz saat packaging (Capacitor #5844),
-      # jadi content-N.json.gz menjadi content-N.json di APK — isinya tetap gzip.
-      # Verifikasi lewat magic bytes (1f 8b), bukan nama file.
-      - name: Verifikasi APK berisi data gzip
+      # Catatan: AAPT2 menghapus ekstensi .gz DAN mendekompresi isinya saat
+      # packaging assets (Capacitor #5844) — content-N.json.gz menjadi
+      # content-N.json berisi JSON biasa. Verifikasi: jumlah file + isi valid.
+      - name: Verifikasi APK berisi data lengkap
         run: |
           APK=android/app/build/outputs/apk/debug/app-debug.apk
           test -f "$APK"
-          GZ=$(unzip -l "$APK" | grep -cE "assets/public/data/.*\.json$" || true)
-          echo "File data di APK: $GZ"
-          if [ "$GZ" -lt 21 ]; then
-            echo "::error::Data tidak lengkap ($GZ/21 file)"
+          N=$(unzip -l "$APK" | grep -cE "assets/public/data/.*\.json$" || true)
+          echo "File data di APK: $N"
+          if [ "$N" -lt 21 ]; then
+            echo "::error::Data tidak lengkap ($N/21 file)"
             exit 1
           fi
           for f in index content-0 content-19; do
             MAGIC=$(unzip -p "$APK" "assets/public/data/$f.json" | head -c 2 | od -An -tx1 | tr -d ' \n')
             echo "$f.json magic: $MAGIC"
-            if [ "$MAGIC" != "1f8b" ]; then
-              echo "::error::$f.json tidak berisi gzip (magic=$MAGIC)"
+            if [ "$MAGIC" = "1f8b" ]; then
+              unzip -p "$APK" "assets/public/data/$f.json" | zcat | python3 -m json.tool > /dev/null \
+                || { echo "::error::$f.json: stream gzip tidak valid"; exit 1; }
+            elif [ "$MAGIC" = "7b22" ]; then
+              unzip -p "$APK" "assets/public/data/$f.json" | python3 -m json.tool > /dev/null \
+                || { echo "::error::$f.json: JSON tidak valid"; exit 1; }
+            else
+              echo "::error::$f.json: magic tak dikenal ($MAGIC)"
               exit 1
             fi
           done

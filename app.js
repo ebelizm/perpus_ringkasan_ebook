@@ -59,21 +59,26 @@ function celebrate() {
 }
 const validIds = new Set();
 
-// Loader data: file disimpan sebagai .json.gz.
+// Loader data: file disimpan sebagai .json.gz di web.
 // - Web (server.mjs): Content-Encoding gzip → fetch() mendekode otomatis
-// - APK: AAPT2 menghapus ekstensi .gz saat packaging (Capacitor #5844),
-//   jadi di native fetch ke .json (isi tetap gzip) → dekode via DecompressionStream
+// - APK: AAPT2 menghapus ekstensi .gz DAN mendekompresi isinya saat packaging
+//   (Capacitor #5844) → fetch ke .json; magic bytes menentukan cara dekode
+//   (jaga kompatibel jika isi ternyata tetap gzip → DecompressionStream)
 const IS_NATIVE = !!window.Capacitor;
 async function fetchGzJson(url) {
   const res = await fetch(url + (IS_NATIVE ? '.json' : '.json.gz'));
   if (!res.ok) throw new Error('gagal memuat ' + url);
   if (res.headers.get('Content-Encoding') === 'gzip') return await res.json();
-  if (typeof DecompressionStream === 'undefined') {
-    throw new Error('WebView terlalu lama untuk membuka data terkompresi — perbarui Android System WebView');
-  }
   const buf = await res.arrayBuffer();
-  const text = await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
-  return JSON.parse(text);
+  const head = new Uint8Array(buf.slice(0, 2));
+  let stream = new Blob([buf]).stream();
+  if (head[0] === 0x1f && head[1] === 0x8b) {
+    if (typeof DecompressionStream === 'undefined') {
+      throw new Error('WebView terlalu lama untuk membuka data terkompresi — perbarui Android System WebView');
+    }
+    stream = stream.pipeThrough(new DecompressionStream('gzip'));
+  }
+  return JSON.parse(await new Response(stream).text());
 }
 
 // ---------- persistensi status baca ----------
