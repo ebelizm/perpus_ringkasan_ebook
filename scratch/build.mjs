@@ -1,9 +1,13 @@
-// Build: gabungkan f15_books.json + rofia_books.json → data/index.json + data/content-N.json
+// Build: gabungkan f15_books.json + rofia_books.json → data/index.json.gz + data/content-N.json.gz
+// Data offline disimpan ter-gzip permanen: repo kecil, APK kecil, web menyajikan via Content-Encoding.
 import fs from 'fs';
+import zlib from 'node:zlib';
 
 const CHUNK_SIZE = 250;
 const DATA_DIR = 'data';
 fs.mkdirSync(DATA_DIR, { recursive: true });
+// hapus file data lama (raw maupun gz) agar tidak ada sisa campuran
+for (const f of fs.readdirSync(DATA_DIR)) fs.rmSync(`${DATA_DIR}/${f}`, { force: true });
 
 const f15 = JSON.parse(fs.readFileSync('scratch/f15_books.json', 'utf8'));
 const rofia = JSON.parse(fs.readFileSync('scratch/rofia_books.json', 'utf8'));
@@ -45,8 +49,9 @@ for (const b of all) {
   chunks.get(b.chunk)[b.id] = raw.blocks;
 }
 for (const [n, obj] of chunks) {
-  fs.writeFileSync(`${DATA_DIR}/content-${n}.json`, JSON.stringify(obj));
-  console.log(`content-${n}.json:`, Object.keys(obj).length, 'buku,', Math.round(fs.statSync(`${DATA_DIR}/content-${n}.json`).size / 1024), 'KB');
+  const p = `${DATA_DIR}/content-${n}.json.gz`;
+  fs.writeFileSync(p, zlib.gzipSync(JSON.stringify(obj), { level: 9 }));
+  console.log(`content-${n}.json.gz:`, Object.keys(obj).length, 'buku,', Math.round(fs.statSync(p).size / 1024), 'KB');
 }
 
 // Index (tanpa blocks)
@@ -70,6 +75,7 @@ const index = {
   },
   books: all,
 };
-fs.writeFileSync(`${DATA_DIR}/index.json`, JSON.stringify(index));
-console.log('index.json:', Math.round(fs.statSync(`${DATA_DIR}/index.json`).size / 1024 / 1024 * 10) / 10, 'MB');
+const idxPath = `${DATA_DIR}/index.json.gz`;
+fs.writeFileSync(idxPath, zlib.gzipSync(JSON.stringify(index), { level: 9 }));
+console.log('index.json.gz:', Math.round(fs.statSync(idxPath).size / 1024 / 1024 * 10) / 10, 'MB');
 console.log(`SELESAI: ${all.length} buku, ${totalWords.toLocaleString('id-ID')} kata, ${chunks.size} chunk.`);

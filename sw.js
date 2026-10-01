@@ -1,5 +1,5 @@
 // Service worker: cache-first agar aplikasi berfungsi 100% offline
-const CACHE = 'perpustakaan-v3';
+const CACHE = 'perpustakaan-v6';
 const CORE = [
   './',
   './index.html',
@@ -8,7 +8,7 @@ const CORE = [
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './data/index.json',
+  './data/index.json.gz',
 ];
 
 self.addEventListener('install', (event) => {

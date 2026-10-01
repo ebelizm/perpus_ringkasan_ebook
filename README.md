@@ -29,8 +29,11 @@ Semua status baca (progress, selesai, tema, ukuran huruf) tersimpan di **localSt
 - Filter sumber & 15 kategori, urutkan judul/terpanjang
 - **Pelacak baca**: tab `Semua / Dibaca / Selesai`, progress otomatis saat scroll, tombol tandai selesai
 - **Tema terang/sepia/gelap minimalis** (siklus lewat tombol; awal mengikuti preferensi sistem, tersimpan; kontras WCAG AA)
-- Tipografi editorial serif untuk isi buku; UI monokrom hangat dengan aksen pastel
-- Grid mobile 2 kolom, target sentuh 44px, safe-area untuk notch
+- Tipografi editorial serif untuk isi buku; UI monokrom hangat dengan aksen emerald
+- **Strip "Lanjutkan membaca"** dengan cincin progres + lanjut otomatis dari posisi terakhir di reader
+- Cover buku monogram tipografis (hue konsisten per judul) + cincin progres di sudut kartu
+- Dock navigasi melayang di thumb zone dengan badge hitungan, segmented pill dengan indikator geser
+- Grid mobile 3 kolom ala rak buku, target sentuh 44–56px, safe-area untuk notch
 - PWA installable (standalone, portrait, ikon maskable) + APK Android via Capacitor
 - Data APK terkompresi gzip (93 MB → 28 MB), dibuka langsung via DecompressionStream
 

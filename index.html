@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#fbfbfa" />
+  <meta name="theme-color" content="#f7f6f2" />
   <title>Perpustakaan Ringkasan Buku — Offline</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.webmanifest" />
@@ -18,37 +18,42 @@
       }
       document.documentElement.dataset.theme = t;
       var m = document.querySelector('meta[name="theme-color"]');
-      if (m) m.content = t === 'dark' ? '#161514' : t === 'sepia' ? '#f4ead8' : '#fbfbfa';
+      if (m) m.content = t === 'dark' ? '#141311' : t === 'sepia' ? '#f3e9d5' : '#f7f6f2';
     })();
   </script>
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand">
-        <span class="brand-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-        </span>
-        <div>
-          <h1>Perpustakaan Ringkasan</h1>
-          <p id="stat-line">Memuat data…</p>
+      <div class="topbar-row">
+        <div class="topbar-head">
+          <h1>Ringkasan</h1>
+          <p class="stat-line" id="stat-line">Memuat data…</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-btn" id="search-jump" title="Ke pencarian" aria-label="Ke pencarian">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          </button>
+          <button class="icon-btn theme-btn" id="theme-toggle" title="Ganti tema" aria-label="Ganti tema">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+            <svg class="icon-sepia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path><path d="M12 8v.01M12 16v.01"></path></svg>
+          </button>
         </div>
       </div>
-      <div class="search-wrap">
-        <span class="search-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
-        </span>
-        <input id="search" type="search" placeholder="Cari judul, penulis…" autocomplete="off" enterkeyhint="search" />
+      <div class="search-row">
+        <div class="search-wrap" id="search-wrap">
+          <span class="search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          </span>
+          <input id="search" type="search" placeholder="Cari judul, penulis…" autocomplete="off" enterkeyhint="search" />
+          <button class="search-clear" id="search-clear" aria-label="Hapus pencarian">✕</button>
+        </div>
+        <label class="full-check" id="full-check" title="Telusuri juga isi buku (11 juta kata)">
+          <input type="checkbox" id="full-search" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6s1.5-2 5-2 5 2 5 2v14s-1.5-1-5-1-5 1-5 1z"></path><path d="M12 6s1.5-2 5-2 5 2 5 2v14s-1.5-1-5-1-5 1-5 1z"></path></svg>
+        </label>
       </div>
-      <label class="full-check">
-        <input type="checkbox" id="full-search" />
-        <span>telusuri isi</span>
-      </label>
-      <button class="theme-btn" id="theme-toggle" title="Ganti tema" aria-label="Ganti tema">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
-        <svg class="icon-sepia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path><path d="M12 8v.01M12 16v.01"></path></svg>
-      </button>
     </div>
   </header>
 
@@ -56,8 +61,8 @@
     <div class="filterbar-inner">
       <div class="seg" id="read-tabs" role="tablist">
         <button class="seg-btn active" data-tab="all">Semua</button>
-        <button class="seg-btn" data-tab="reading">Dibaca <span id="count-reading"></span></button>
-        <button class="seg-btn" data-tab="done">Selesai <span id="count-done"></span></button>
+        <button class="seg-btn" data-tab="reading">Dibaca <span class="seg-count" id="count-reading">0</span></button>
+        <button class="seg-btn" data-tab="done">Selesai <span class="seg-count" id="count-done">0</span></button>
       </div>
       <div class="filter-controls">
         <div class="chips" id="source-chips"></div>
@@ -72,32 +77,87 @@
     </div>
   </nav>
 
-  <main id="grid" class="grid"></main>
-  <div id="sentinel" style="height:1px"></div>
-  <div id="empty" class="empty hidden">Tidak ada hasil. Coba kata kunci lain.</div>
+  <main id="content">
+    <section class="continue-wrap hidden" id="continue-section">
+      <div class="continue-head">
+        <h2>Lanjutkan membaca</h2>
+        <button class="continue-clear" id="continue-clear" type="button">Reset</button>
+      </div>
+      <div class="continue-strip" id="continue-strip"></div>
+    </section>
+
+    <div id="grid" class="grid"></div>
+
+    <div id="sentinel" style="height:1px"></div>
+
+    <div id="empty" class="empty hidden">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path><path d="M8.5 11h5"></path></svg>
+      </div>
+      <h2>Tidak ada hasil</h2>
+      <p>Coba kata kunci lain, atau kecilkan filternya.</p>
+      <button class="empty-btn" id="empty-reset">Reset pencarian &amp; filter</button>
+    </div>
+  </main>
+
+  <div class="bottom-pad"></div>
+
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <button class="nav-item active" data-nav="library" aria-label="Perpustakaan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        <span class="nav-label">Perpustakaan</span>
+      </button>
+      <button class="nav-item" data-nav="reading" aria-label="Sedang dibaca">
+        <span class="nav-count hidden" data-nav-count="reading"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6s1.5-2 5-2 5 2 5 2v14s-1.5-1-5-1-5 1-5 1z"></path><path d="M12 6s1.5-2 5-2 5 2 5 2v14s-1.5-1-5-1-5 1-5 1z"></path></svg>
+        <span class="nav-label">Dibaca</span>
+      </button>
+      <button class="nav-item" data-nav="done" aria-label="Selesai dibaca">
+        <span class="nav-count hidden" data-nav-count="done"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12.5l3 3 5.5-6"></path><circle cx="12" cy="12" r="9"></circle></svg>
+        <span class="nav-label">Selesai</span>
+      </button>
+    </div>
+  </nav>
 
   <!-- Panel baca -->
   <div id="reader" class="reader hidden" role="dialog" aria-modal="true">
     <div class="reader-backdrop" data-close></div>
     <div class="reader-panel">
       <header class="reader-head">
-        <button class="icon-btn" data-close title="Tutup (Esc)">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
-        </button>
-        <div class="reader-head-info">
-          <h2 id="reader-title"></h2>
-          <p id="reader-meta"></p>
-        </div>
-        <div class="reader-tools">
-          <button class="icon-btn sm" id="font-dec" title="Perkecil huruf">A−</button>
-          <button class="icon-btn sm" id="font-inc" title="Perbesar huruf">A+</button>
-          <button class="done-btn" id="toggle-done" title="Tandai selesai">✓<span class="done-label"> Tandai selesai</span></button>
+        <div class="reader-top">
+          <button class="icon-btn" data-close title="Tutup (Esc)" aria-label="Tutup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+          </button>
+          <div class="reader-head-info">
+            <h2 id="reader-title"></h2>
+            <p id="reader-meta"></p>
+          </div>
         </div>
       </header>
       <div class="reader-progress"><div id="reader-progress-bar"></div></div>
-      <button class="toc-toggle" id="toc-toggle">☰ Daftar isi</button>
+      <button class="toc-toggle" id="toc-toggle" title="Daftar isi" aria-label="Daftar isi">☰ Daftar isi</button>
       <div class="reader-toc" id="reader-toc"></div>
-      <article class="reader-body" id="reader-body"></article>
+      <div class="reader-scroll" id="reader-scroll">
+        <div class="reader-hero">
+          <div class="reader-cover" id="reader-cover" aria-hidden="true"><span class="cover-mono" id="reader-cover-mono"></span><span class="cover-line"></span></div>
+          <h2 id="reader-hero-title"></h2>
+          <div class="reader-meta" id="reader-chips"></div>
+        </div>
+        <article class="reader-body" id="reader-body"></article>
+      </div>
+      <div class="reader-actions">
+        <button class="icon-btn" id="font-dec" title="Perkecil huruf" aria-label="Perkecil huruf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6s1.5-2 5-2 5 2 5 2v14s-1.5-1-5-1-5 1-5 1z"></path><path d="m18 12h4M20 10v4"></path></svg>
+        </button>
+        <button class="icon-btn" id="font-inc" title="Perbesar huruf" aria-label="Perbesar huruf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6s1.5-2 5-2 5 2 5 2v14s-1.5-1-5-1-5 1-5 1z"></path><path d="M18 8h4M20 6v4"></path></svg>
+        </button>
+        <button class="done-btn" id="toggle-done" title="Tandai selesai">
+          <span class="done-label">Tandai selesai</span>
+        </button>
+      </div>
     </div>
   </div>
 

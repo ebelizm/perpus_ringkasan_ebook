@@ -13,6 +13,7 @@ const MIME = {
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.gz': 'application/gzip',
+  '.json.gz': 'application/gzip',
   '.svg': 'image/svg+xml',
   '.webmanifest': 'application/manifest+json',
   '.png': 'image/png',
@@ -25,11 +26,9 @@ http.createServer((req, res) => {
   const file = path.normalize(path.join(ROOT, urlPath));
   if (!file.startsWith(ROOT)) { res.writeHead(403); return res.end('Forbidden'); }
 
-  // gzip: sajikan file .gz bila ada & client mendukung (data APK terkompresi)
-  const acceptsGzip = /gzip/.test(String(req.headers['accept-encoding'] || ''));
-  const gzPath = acceptsGzip && file.endsWith('.json') ? file + '.gz' : null;
-  if (gzPath && fs.existsSync(gzPath)) {
-    return fs.readFile(gzPath, (err, buf) => {
+  // data disimpan sebagai .json.gz: browser men-decode otomatis via Content-Encoding
+  if (file.endsWith('.json.gz') && fs.existsSync(file)) {
+    return fs.readFile(file, (err, buf) => {
       if (err) { res.writeHead(404); return res.end('404'); }
       res.writeHead(200, {
         'Content-Type': MIME['.json'],
