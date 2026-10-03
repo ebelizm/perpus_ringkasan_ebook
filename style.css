@@ -42,6 +42,9 @@
   --radius-sm: 12px;
   --font-size: 1rem;
   --nav-h: 64px;
+  /* tinggi topbar nyata — disetel via JS (ResizeObserver) agar offset sticky
+     filterbar selalu pas di berbagai perangkat/font-scale/zoom */
+  --topbar-h: 136px;
 
   /* cover buku — hue stabil per hash judul */
   --cover-h: 152;
@@ -116,6 +119,7 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   transition: background 0.25s ease, color 0.25s ease;
+  overflow-x: clip; /* cegah scroll horizontal akibat sticky/blur di layar kecil */
 }
 
 button, select, input { font-family: inherit; }
@@ -333,7 +337,7 @@ svg { flex-shrink: 0; }
 /* ===== Filter bar — seg pill + kontrol ikon ===== */
 .filterbar {
   position: sticky;
-  top: calc(env(safe-area-inset-top) + 136px);
+  top: var(--topbar-h); /* topbar sudah termasuk safe-area padding */
   z-index: 40;
   background: color-mix(in srgb, var(--bg) 90%, transparent);
   backdrop-filter: blur(14px);
@@ -1002,11 +1006,12 @@ mark { background: var(--accent-soft); color: var(--accent-strong); padding: 0 2
 ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 ::-webkit-scrollbar-track { background: transparent; }
 
-/* ===== Mobile ===== */
+/* ===== Responsif ===== */
+
+/* Ponsel & phablet — baris filter bisa digeser, grid 3 kolom rapat */
 @media (max-width: 640px) {
   .topbar-head h1 { font-size: 1.2rem; }
   .topbar-inner { padding: 12px 12px 8px; gap: 10px; }
-  .filterbar { top: calc(env(safe-area-inset-top) + 124px); }
   .filterbar-inner { padding: 8px 8px; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
   .filterbar-inner::-webkit-scrollbar { display: none; }
   .filter-controls { flex-shrink: 0; }
@@ -1028,6 +1033,47 @@ mark { background: var(--accent-soft); color: var(--accent-strong); padding: 0 2
   .toc-toggle { display: block; }
   .reader-toc { display: none; }
   .reader-toc.open { display: flex; max-height: 40vh; }
+  .reader-hero { padding: 16px 18px 8px; }
   .reader-body { padding: 20px 18px 24px; line-height: 1.9; }
   .reader-hero h2 { font-size: 1.3rem; }
+  .reader-actions .icon-btn { width: 40px; height: 40px; }
+  .done-btn { height: 40px; }
+}
+
+/* Ponsel sempit (<360px) — 2 kolom agar kartu tidak sempit,
+   target sentuh tetap ≥44px */
+@media (max-width: 359px) {
+  .grid { grid-template-columns: repeat(2, 1fr); padding: 12px 10px 8px; gap: 10px; }
+  .card-cover { height: 128px; }
+  .card-author { display: block; }
+  .icon-btn { width: 44px; height: 44px; }
+  .search-wrap { min-height: 48px; padding: 0 14px; }
+  .full-check { width: 48px; height: 48px; }
+}
+
+/* Dock nav lebih lega di ponsel besar */
+@media (min-width: 430px) {
+  .bottom-nav { max-width: 400px; }
+}
+
+/* Ponsel besar / tablet kecil — kolom lebih lapang */
+@media (min-width: 641px) and (max-width: 900px) {
+  .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); padding: 16px 16px 8px; gap: 14px; }
+  .card-cover { height: 140px; }
+}
+
+/* Tablet & desktop — lebih lapang lagi */
+@media (min-width: 901px) {
+  .grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); padding: 20px 20px 8px; gap: 16px; }
+  .card-cover { height: 148px; }
+  .continue-wrap { padding: 8px 20px 4px; }
+}
+
+/* Layar pendek (landscape) — padatkan header, cover, dan hero reader */
+@media (max-height: 480px) and (orientation: landscape) {
+  .topbar-inner { padding: 8px 12px 6px; gap: 6px; }
+  .card-cover { height: 88px; }
+  .reader-hero { padding: 12px 24px 6px; }
+  .reader-cover { width: 56px; margin-bottom: 8px; }
+  .bottom-pad { height: calc(var(--nav-h) + env(safe-area-inset-bottom) + 8px); }
 }

@@ -5,23 +5,38 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '24'
+
+      # Cache Gradle (wrapper + dependensi) — project android/ dibuat ulang tiap
+      # run, jadi tanpa cache semua dependensi diunduh ulang setiap kali.
+      # v5 (bukan v6): gradle/actions v6 mengubah lisensi caching.
+      - uses: gradle/actions/setup-gradle@v5
 
       - name: Install Capacitor
-        run: npm install --no-save @capacitor/cli @capacitor/core @capacitor/android @capacitor/assets
+        # Pin major 8 agar project Android yang dibuat ulang tiap run tetap
+        # stabil — lompatan major Capacitor tidak boleh memecah CI tiba-tiba.
+        run: npm install --no-save @capacitor/cli@8 @capacitor/core@8 @capacitor/android@8 @capacitor/assets
 
       - name: Siapkan www/ + project Android
         run: node scripts/prepare-android.mjs
@@ -59,7 +74,7 @@ jobs:
           done
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: perpustakaan-ringkasan-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk

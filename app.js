@@ -22,6 +22,14 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 const SOURCE_LABEL = { f15: 'F15 Library', rofia: 'Rofiatulmaos' };
 const READING_RESET_KEY = 'readingResetAt';
 
+// offset sticky filterbar mengikuti tinggi topbar nyata — aman terhadap
+// font-scale Android, zoom, dan wrap teks di berbagai perangkat
+const syncTopbarH = () =>
+  document.documentElement.style.setProperty('--topbar-h', document.querySelector('.topbar').offsetHeight + 'px');
+syncTopbarH();
+if (typeof ResizeObserver !== 'undefined') new ResizeObserver(syncTopbarH).observe($('.topbar'));
+else window.addEventListener('resize', syncTopbarH);
+
 // hue stabil 0-359 dari judul — dipakai untuk warna cover buku
 const hashHue = (s) => {
   let h = 0;
