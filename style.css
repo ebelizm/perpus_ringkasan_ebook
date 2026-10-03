@@ -1018,10 +1018,11 @@ mark { background: var(--accent-soft); color: var(--accent-strong); padding: 0 2
   .seg-btn { padding: 8px 11px; font-size: 0.74rem; }
   select { max-width: none; }
 
-  /* grid 3 kolom rapat ala toko buku */
+  /* grid 3 kolom rapat ala toko buku — cover fluid (92–112px)
+     mengikuti lebar layar agar kartu makin kecil di ponsel sempit */
   .grid { grid-template-columns: repeat(3, 1fr); padding: 12px 8px 8px; gap: 8px; }
   .card { padding: 8px 8px 10px; gap: 6px; border-radius: 14px; }
-  .card-cover { height: 112px; }
+  .card-cover { height: clamp(92px, 28vw, 112px); }
   .card h3 { font-size: 0.84rem; }
   .card-author { display: none; }
   .card-words { font-size: 0.6rem; }
