@@ -41,16 +41,16 @@ jobs:
       - name: Siapkan www/ + project Android
         run: node scripts/prepare-android.mjs
 
-      - name: Build debug APK
+      - name: Build release APK (R8 + shrink resources)
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew assembleRelease --no-daemon
 
       # Catatan: AAPT2 menghapus ekstensi .gz DAN mendekompresi isinya saat
       # packaging assets (Capacitor #5844) — content-N.json.gz menjadi
       # content-N.json berisi JSON biasa. Verifikasi: jumlah file + isi valid.
       - name: Verifikasi APK berisi data lengkap
         run: |
-          APK=android/app/build/outputs/apk/debug/app-debug.apk
+          APK=android/app/build/outputs/apk/release/app-release.apk
           test -f "$APK"
           N=$(unzip -l "$APK" | grep -cE "assets/public/data/.*\.json$" || true)
           echo "File data di APK: $N"
@@ -77,9 +77,9 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: perpustakaan-ringkasan-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
 
       - name: Ukuran APK
         if: always()
-        run: ls -lh android/app/build/outputs/apk/debug/app-debug.apk || true
+        run: ls -lh android/app/build/outputs/apk/release/app-release.apk || true

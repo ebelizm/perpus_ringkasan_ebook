@@ -1041,11 +1041,25 @@ mark { background: var(--accent-soft); color: var(--accent-strong); padding: 0 2
   .done-btn { height: 40px; }
 }
 
-/* Ponsel sempit (<360px) — 2 kolom agar kartu tidak sempit,
-   target sentuh tetap ≥44px */
+/* Ponsel umum (360–430px) — 4 kolom: kartu jauh lebih sempit,
+   cover proporsional 3:4 seperti toko buku */
+@media (max-width: 430px) {
+  .grid { grid-template-columns: repeat(4, 1fr); padding: 10px 6px 8px; gap: 6px; }
+  .card { padding: 6px 6px 8px; gap: 4px; }
+  .card-cover { height: clamp(84px, 26vw, 104px); }
+  .card h3 { font-size: 0.7rem; }
+  .card-words { font-size: 0.54rem; }
+  .cover-ring { width: 26px; height: 26px; top: 4px; right: 4px; }
+  .cover-cat { display: none; }
+}
+
+/* Ponsel sempit (<360px) — 3 kolom, target sentuh tetap ≥44px */
 @media (max-width: 359px) {
-  .grid { grid-template-columns: repeat(2, 1fr); padding: 12px 10px 8px; gap: 10px; }
-  .card-cover { height: 128px; }
+  .grid { grid-template-columns: repeat(3, 1fr); padding: 10px 6px 8px; gap: 6px; }
+  .card-cover { height: clamp(80px, 27vw, 100px); }
+  .card h3 { font-size: 0.68rem; }
+  .cover-ring { width: 24px; height: 24px; }
+  .cover-cat { display: none; }
   .card-author { display: block; }
   .icon-btn { width: 44px; height: 44px; }
   .search-wrap { min-height: 48px; padding: 0 14px; }

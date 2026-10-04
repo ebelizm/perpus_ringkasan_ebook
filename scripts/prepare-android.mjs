@@ -33,6 +33,31 @@ try {
   console.warn('Peringatan: generate ikon gagal (lanjut dengan ikon default):', e.message);
 }
 
+// 2c. Rampingkan APK: R8 + shrink resources di build type release.
+// APK debug sebelumnya ~40 MB dengan ~11 MB library/aseset tak terpakai.
+// Release ditandatangani pakai keystore debug supaya tetap bisa di-install
+// tanpa rahasia CI (pengguna tetap uninstall APK lama saat ganti versi).
+const GRADLE = 'android/app/build.gradle';
+let gradle = fs.readFileSync(GRADLE, 'utf8');
+if (!gradle.includes('shrinkResources true')) {
+  gradle = gradle
+    .replace(/minifyEnabled\s+false/, 'minifyEnabled true')
+    .replace(/(proguardFiles[^\n]*\n)/, '$1            shrinkResources true\n            signingConfig signingConfigs.debug\n');
+  if (!/minifyEnabled true/.test(gradle) || !/shrinkResources true/.test(gradle)) {
+    throw new Error('Patch build.gradle gagal — template Capacitor berubah? Periksa android/app/build.gradle');
+  }
+  fs.writeFileSync(GRADLE, gradle);
+  // Jaga annotate @JavascriptInterface agar R8 tidak membuang bridge Capacitor
+  const PRO = 'android/app/proguard-rules.pro';
+  if (fs.existsSync(PRO)) {
+    const keep = '-keepclassmembers class * {\n    @android.webkit.JavascriptInterface <methods>;\n}\n';
+    if (!fs.readFileSync(PRO, 'utf8').includes('JavascriptInterface')) {
+      fs.appendFileSync(PRO, '\n' + keep);
+    }
+  }
+  console.log('build.gradle: R8 + shrink resources aktif untuk release');
+}
+
 // 3. Salin aset web ke project android
 // hapus aset lama dulu — cap copy tidak membersihkan tujuan (file basi menumpuk)
 fs.rmSync('android/app/src/main/assets/public', { recursive: true, force: true });
