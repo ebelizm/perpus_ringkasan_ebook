@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write  # untuk mengunggah APK ke Release (link unduh yang stabil)
 
 concurrency:
   group: build-apk-${{ github.ref }}
@@ -83,3 +83,21 @@ jobs:
       - name: Ukuran APK
         if: always()
         run: ls -lh android/app/build/outputs/apk/release/app-release.apk || true
+
+      # Satu release berlabel "apk" yang selalu ditimpa, bukan tag per build:
+      # pengguna cukup punya satu URL stabil untuk mengunduh versi terbaru
+      # (artifact Actions sendiri kedaluwarsa setelah 90 hari).
+      - name: Publish ke GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          APK=android/app/build/outputs/apk/release/app-release.apk
+          VERSION=$(grep -oE 'versionName\s+"[^"]+"' android/app/build.gradle | grep -oE '"[^"]+"' | tr -d '"')
+          NOTE="APK build \`${{ github.sha }}\` (versionName $VERSION). Data katalog ikut terisi di dalam APK — unduh ulang utuh saat memasang."
+          if gh release view apk > /dev/null 2>&1; then
+            gh release upload apk "$APK" --clobber
+            gh release edit apk --title "Ringgo Book (APK terbaru)" --notes "$NOTE" > /dev/null
+          else
+            gh release create apk "$APK" --title "Ringgo Book (APK terbaru)" --notes "$NOTE"
+          fi
+          echo "Download: $(gh release view apk --json url -q .url)"

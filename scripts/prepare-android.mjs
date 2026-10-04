@@ -1,6 +1,8 @@
 // Siapkan build Android: ikon → www/ → cap add → ikon native → copy
 import fs from 'fs';
 import { execSync } from 'child_process';
+// Logika versi diekstrak ke modul sendiri supaya bisa diuji tanpa build Android.
+import { androidVersion, patchVersion } from './android-version.mjs';
 
 // 0. Generate ikon + splash (assets/icon.png, assets/splash.png, icons/)
 execSync('node scratch/gen_icons.mjs', { stdio: 'inherit' });
@@ -57,6 +59,11 @@ if (!gradle.includes('shrinkResources true')) {
   }
   console.log('build.gradle: R8 + shrink resources aktif untuk release');
 }
+
+// 2d. Naikkan versi Android (lihat scripts/android-version.mjs)
+const version = androidVersion();
+fs.writeFileSync(GRADLE, patchVersion(gradle, version));
+console.log(`build.gradle: versionCode ${version.versionCode} / versionName ${version.versionName}`);
 
 // 3. Salin aset web ke project android
 // hapus aset lama dulu — cap copy tidak membersihkan tujuan (file basi menumpuk)

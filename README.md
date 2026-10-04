@@ -17,7 +17,9 @@ Buka **http://localhost:5173**.
 
 ## Instalasi di Android
 
-**Cara 1 — APK** (disarankan): unduh `PerpustakaanRingkasan-debug.apk` dari [artifact GitHub Actions](https://github.com/ebelizm/perpus_ringkasan_ebook/actions) atau salin file yang sudah diunduh, lalu install (izinkan "sumber tidak dikenal").
+**Cara 1 — APK** (disarankan): unduh `app-release.apk` dari [release `apk`](https://github.com/ebelizm/perpus_ringkasan_ebook/releases/latest), lalu install (izinkan "sumber tidak dikenal"). Release ini selalu ditimpa dengan build terbaru, jadi satu link itu cukup.
+
+Mengganti versi: **uninstall APK lama dulu, baru pasang yang baru**. APK ditandatangani keystore debug (dijalankan otomatis di CI, tanpa rahasia yang harus disimpan), dan Android menolak menimpa APK dengan tanda tangan berbeda — data baca di localStorage ikut terhapus bersama aplikasinya, jadi progress hilang saat mengganti versi.
 
 **Cara 2 — PWA**: jalankan `node server.mjs`, buka `http://<IP-KOMPUTER>:5173` dari Chrome Android, ketuk **⋮ → Tambahkan ke layar utama**.
 
@@ -68,4 +70,9 @@ npm run scrape:f15 && npm run scrape:rofia && node scratch/merge_parts.mjs && np
 
 ## Build APK
 
-Push ke `main` memicu workflow **Build APK** (`.github/workflows/build-apk.yml`); hasilnya ada di tab Actions sebagai artifact `perpustakaan-ringkasan-apk`.
+Push ke `main` memicu workflow **Build APK** (`.github/workflows/build-apk.yml`). Hasilnya dikirim ke dua tempat:
+
+- Release [`apk`](https://github.com/ebelizm/perpus_ringkasan_ebook/releases/latest) — link unduh yang stabil, selalu berisi build terbaru (artifact Actions sendiri kedaluwarsa setelah 90 hari)
+- Tab Actions sebagai artifact `perpustakaan-ringkasan-apk`
+
+`versionCode` APK diambil dari jumlah commit di `main` (`scripts/android-version.mjs`), jadi selalu naik seiring commit baru dan Android memperlakukan build berikutnya sebagai upgrade, bukan duplikat.
