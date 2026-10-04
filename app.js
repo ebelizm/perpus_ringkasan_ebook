@@ -159,29 +159,29 @@ function renderContinue() {
     const pct = getProgress(id);
     const el = document.createElement('button');
     el.className = 'continue-card';
-    el.innerHTML = `${ringHtml(pct, false)}<span class="ctext"><strong>${highlight(b.title)}</strong><small>Dibaca ${pct}%</small></span>`;
+    el.innerHTML =
+      `<span class="continue-cover" style="--cover-h:${hashHue(b.title)}"><span class="cover-mono"></span></span>` +
+      `<span class="ctext"><strong>${highlight(b.title)}</strong><small>Dibaca ${pct}%</small>` +
+      `<span class="cbar"><i style="width:${pct}%"></i></span></span>`;
+    el.querySelector('.cover-mono').textContent = monogramOf(b.title);
     el.addEventListener('click', () => openReader(b));
     strip.appendChild(el);
+    queueCoverEl(el.querySelector('.continue-cover'), id);
   }
 }
 
-// cincin progress SVG (dipakai strip lanjut baca)
-function ringHtml(pct, done) {
-  const r = 19, c = 2 * Math.PI * r;
-  const off = c * (1 - Math.min(100, pct) / 100);
-  return `<span class="c-ring${done ? ' done' : ''}"><svg viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="${r}"></circle><circle class="ring-fg" cx="22" cy="22" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"></circle></svg>${done ? '' : `<span>${pct}%</span>`}</span>`;
-}
 
-// cover monogram — konsisten di grid & reader (hue dari hash judul)
+
+// cover monogram — konsisten di grid, continue-strip & reader (hue dari hash judul)
 // Slot <img> disiapkan untuk cover asli yang diambil saat online (lihat di bawah).
 function coverHtml(hue, bookId) {
   return `<div class="card-cover" style="--cover-h:${hue}"${bookId ? ` data-book="${esc(bookId)}"` : ''}><img class="cover-img" alt="" decoding="async" /><div class="cover-book"><span class="cover-mono"></span><span class="cover-line"></span></div><span class="cover-cat"></span></div>`;
 }
 
 /* ---------- Cover asli: diambil saat online, dicache di IndexedDB ----------
-   APK sengaja tidak memaketkan gambar: 4.8rb cover ≈ +61 MB. Sumber dicek
-   berurutan Wikipedia → Google Books → Open Library, dan hanya dipakai bila
-   judulnya mirip (≥0.6) supaya cover tidak salah pasang. Offline: monogram. */
+   APK sengaja tidak memaketkan gambar: 4.8rb cover ≈ +61 MB. Sumber utama
+   Open Library (CORS-aman), lalu Wikipedia id/en; hanya dipakai bila judulnya
+   mirip (≥0.6) supaya cover tidak salah dipasang. Offline: monogram. */
 const COVER_MIN_SIM = 0.6;
 const COVER_NEG_TTL = 30 * 864e5; // hasil negatif dicache, dicoba lagi sebulan kemudian
 const COVER_MAX_CONCURRENT = 4;
@@ -265,6 +265,14 @@ async function findCoverUrl(book) {
 
 const coverQueue = [];
 let coverBusy = 0;
+// ambil antrean berikutnya, buang entri yang elemennya sudah lepas
+function nextQueuedCover() {
+  while (coverQueue.length) {
+    const [el, id] = coverQueue.shift();
+    if (el.isConnected) return [el, id];
+  }
+  return null;
+}
 function queueCoverEl(el, bookId) {
   if (!el || !bookId) return;
   el.dataset.book = bookId;
@@ -272,7 +280,7 @@ function queueCoverEl(el, bookId) {
     coverBusy++;
     loadCover(el).finally(() => {
       coverBusy--;
-      const next = coverQueue.shift();
+      const next = nextQueuedCover();
       if (next) queueCoverEl(next[0], next[1]);
     });
   };
@@ -376,6 +384,31 @@ function ringBadge(pct, done) {
   const r = 13.5, c = 2 * Math.PI * r;
   const off = c * (1 - Math.min(100, pct) / 100);
   return `<span class="cover-ring${done ? ' done' : ''}" data-pct="${pct}%"><svg viewBox="0 0 34 34"><circle class="ring-bg" cx="17" cy="17" r="${r}"></circle><circle class="ring-fg" cx="17" cy="17" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"></circle></svg></span>`;
+}
+
+// ---------- empty state: jangan layar kosong, tapi sarankan jalan keluar ----------
+// Kategori terpopuler jadi shortcut sekali ketuk (memadukan Reduce friction
+// dengan "never show a blank screen": layar kosong tanpa saran itu dead end).
+function renderEmptySuggestions() {
+  const box = $('#empty-sugg');
+  if (!box || !state.index) return;
+  const cats = Object.entries(state.index.stats.categories)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+  box.innerHTML = cats
+    .map(([c, n]) => `<button type="button" data-cat="${esc(c)}">${esc(c)} · ${n.toLocaleString('id-ID')}</button>`)
+    .join('');
+  box.onclick = (e) => {
+    const b = e.target.closest('button[data-cat]');
+    if (!b) return;
+    state.query = '';
+    state.categoryFilter = b.dataset.cat;
+    $('#search').value = '';
+    $('#search-wrap').classList.remove('has-value');
+    $('#category-select').value = b.dataset.cat;
+    applyFilters();
+    toast('Kategori: ' + b.dataset.cat);
+  };
 }
 
 // ---------- toast ----------
@@ -644,6 +677,7 @@ async function applyFilters() {
   state.filtered = list;
   $('#grid').innerHTML = '';
   $('#empty').classList.toggle('hidden', list.length > 0);
+  if (!list.length) renderEmptySuggestions();
 
   const doneCount = countValid(state.done);
   const pct = Math.round((doneCount / s.total) * 100);

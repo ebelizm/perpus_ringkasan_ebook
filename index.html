@@ -26,9 +26,14 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div class="topbar-row">
-        <div class="topbar-head">
-          <h1>Ringgo Book</h1>
-          <p class="stat-line" id="stat-line">Memuat data…</p>
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 6.6a9 9 0 0 0-9.9-1.3A9 9 0 0 0 4 5v13a1 1 0 0 0 1.3 1A9 9 0 0 1 20 19V6.6Z"></path><path d="M20 6.6V4"></path></svg>
+          </span>
+          <div class="brand-text topbar-head">
+            <h1>Ringgo Book</h1>
+            <p class="stat-line" id="stat-line">Memuat data…</p>
+          </div>
         </div>
         <div class="topbar-actions">
           <button class="icon-btn" id="search-jump" title="Ke pencarian" aria-label="Ke pencarian">
@@ -95,7 +100,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path><path d="M8.5 11h5"></path></svg>
       </div>
       <h2>Tidak ada hasil</h2>
-      <p>Coba kata kunci lain, atau kecilkan filternya.</p>
+      <p>Judul yang dicari belum ada di pustaka ini. Coba kata kunci lain, atau mulai dari kategori di bawah.</p>
+      <div class="empty-sugg" id="empty-sugg"></div>
       <button class="empty-btn" id="empty-reset">Reset pencarian &amp; filter</button>
     </div>
   </main>
@@ -142,8 +148,10 @@
       <div class="reader-scroll" id="reader-scroll">
         <div class="reader-hero">
           <div class="reader-cover" id="reader-cover" aria-hidden="true"><span class="cover-mono" id="reader-cover-mono"></span><span class="cover-line"></span></div>
-          <h2 id="reader-hero-title"></h2>
-          <div class="reader-meta" id="reader-chips"></div>
+          <div class="reader-hero-info">
+            <h2 id="reader-hero-title"></h2>
+            <div class="reader-meta" id="reader-chips"></div>
+          </div>
         </div>
         <article class="reader-body" id="reader-body"></article>
       </div>
