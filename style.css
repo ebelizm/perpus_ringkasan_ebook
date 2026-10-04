@@ -159,7 +159,11 @@ html, body {
 }
 
 button, select, input { font-family: inherit; font-weight: var(--w-reg); }
-button { touch-action: manipulation; }
+/* `color: inherit` wajib, bukan opsional: tanpa itu UA memberi button color
+   `buttontext` (hitam) yang TIDAK diwarisi dari body. Judul di dalam kartu
+   "lanjutkan baca" jadi hitam di atas kartu gelap — kontras 1,2:1 di mode
+   gelap. Tombol lain kebetulan aman karena warna theirs ditulis eksplisit. */
+button { color: inherit; touch-action: manipulation; }
 svg { flex-shrink: 0; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius-sm); }
 
