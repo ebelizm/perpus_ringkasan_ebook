@@ -184,6 +184,7 @@ function coverHtml(hue, bookId) {
    mirip (≥0.6) supaya cover tidak salah dipasang. Offline: monogram. */
 const COVER_MIN_SIM = 0.6;
 const COVER_NEG_TTL = 30 * 864e5; // hasil negatif dicache, dicoba lagi sebulan kemudian
+const COVER_ERR_TTL = 10 * 60e3; // lookup gagal karena lambat/jaringan → coba lagi sebentar saja
 const COVER_MAX_CONCURRENT = 4;
 
 const coverDb = (() => {
@@ -227,17 +228,22 @@ function coverQuery(book) {
   return coverWords(t).join(' ');
 }
 
-// fetch dengan batas waktu — satu sumber yang lambat tidak boleh menyendat antrean
-function coverFetch(url, ms = 4500) {
+// fetch dengan batas waktu — satu sumber yang lambat tidak boleh menyendat antrean.
+// Batasnya longgar: Open Library terukur 0,3–2,8 detik, jadi 4,5 detik pernah
+// membatalkan lookup yang sebenarnya berhasil (cover lalu hilang 30 hari).
+function coverFetch(url, ms = 8000) {
   const ac = new AbortController();
   const t = setTimeout(() => ac.abort(), ms);
   return fetch(url, { signal: ac.signal }).finally(() => clearTimeout(t));
 }
 
+// { url, errored } — `errored` membedakan "katalog memang tidak punya cover"
+// (layak dicache sebulan) dari "sumber timeout/gagal" (hanya dicache sebentar).
 async function findCoverUrl(book) {
   const enc = encodeURIComponent(coverQuery(book));
+  let errored = false;
   // 1. Open Library (CORS-aman, cakupan terbaik diukur: 44% title match persis)
-  try {
+  const olSearch = async () => {
     const q = `https://openlibrary.org/search.json?title=${enc}&limit=5&fields=cover_i,title`;
     const j = await (await coverFetch(q)).json();
     let best = null;
@@ -246,21 +252,33 @@ async function findCoverUrl(book) {
       const s = coverSim(book.title, d.title);
       if (!best || s > best.s) best = { s, url: `https://covers.openlibrary.org/b/id/${d.cover_i}-M.jpg` };
     }
-    if (best && best.s >= COVER_MIN_SIM) return best.url;
-  } catch { /* lanjut ke Wikipedia */ }
-  // 2. Wikipedia id+en — untuk buku Indonesia; cari lewat pencarian, bukan judul persis
+    return best && best.s >= COVER_MIN_SIM ? best.url : null;
+  };
+  try {
+    const hit = await olSearch();
+    if (hit) return { url: hit, errored };
+  } catch { errored = true; }
+  // 2. Sumber utama gagal/slow → coba sekali lagi SEBELUM menyedikitkan waktu
+  //    di Wikipedia; dengan begitu kasus umum tetap cepat.
+  if (errored) {
+    try {
+      const hit = await olSearch();
+      if (hit) return { url: hit, errored };
+    } catch { /* tetap coba sumber lain */ }
+  }
+  // 3. Wikipedia id+en — untuk buku Indonesia; cari lewat pencarian, bukan judul persis
   for (const lang of ['id', 'en']) {
     try {
-      const s = await (await coverFetch(`https://${lang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srlimit=3&srsearch=${enc}`)).json();
+      const s = await (await coverFetch(`https://${lang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srlimit=3&srsearch=${enc}`, 5000)).json();
       for (const hit of s.query?.search || []) {
         if (coverSim(book.title, hit.title) < COVER_MIN_SIM) continue;
-        const p = await (await coverFetch(`https://${lang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail&pithumbsize=240&titles=${encodeURIComponent(hit.title)}`)).json();
+        const p = await (await coverFetch(`https://${lang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail&pithumbsize=240&titles=${encodeURIComponent(hit.title)}`, 5000)).json();
         const pg = Object.values(p.query?.pages || {})[0];
-        if (pg?.thumbnail?.source) return pg.thumbnail.source;
+        if (pg?.thumbnail?.source) return { url: pg.thumbnail.source, errored };
       }
-    } catch { /* sumber berikutnya */ }
+    } catch { errored = true; /* sumber berikutnya */ }
   }
-  return null;
+  return { url: null, errored };
 }
 
 const coverQueue = [];
@@ -299,16 +317,17 @@ async function loadCover(el) {
   if (!book) return;
   try {
     let rec = await coverDb.get(id);
-    if (!rec || Date.now() - (rec.t || 0) > COVER_NEG_TTL) {
+    const ttl = rec && rec.ttl ? rec.ttl : COVER_NEG_TTL;
+    if (!rec || Date.now() - (rec.t || 0) > ttl) {
       if (!navigator.onLine) {
         if (rec && rec.ok) showCoverImg(el, rec.blob);
         return;
       }
-      const url = await findCoverUrl(book);
+      const { url, errored } = await findCoverUrl(book);
       let blob = null;
       if (url) {
         try {
-          const res = await coverFetch(url, 8000);
+          const res = await coverFetch(url, 12000);
           const type = (res.headers.get('content-type') || '').split(';')[0];
           if (res.ok && /^image\/(jpeg|png|webp)$/.test(type)) {
             const b = await res.blob();
@@ -322,7 +341,9 @@ async function loadCover(el) {
           return;
         }
       }
-      rec = { ok: !!blob, blob, url, t: Date.now() };
+      // hasil kosong karena sumber lambat ≠ katalog tidak punya cover: jangan
+      // dikunci sebulan, hanya sepuluh menit agar ada kesempatan dicoba lagi
+      rec = { ok: !!blob, blob, url, t: Date.now(), ttl: errored ? COVER_ERR_TTL : COVER_NEG_TTL };
       await coverDb.put(id, rec);
     }
     if (rec.ok && rec.blob) showCoverImg(el, rec.blob);
