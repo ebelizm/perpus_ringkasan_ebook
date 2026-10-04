@@ -1,5 +1,5 @@
 /* ============================================================
-   Perpustakaan Ringkasan — design system v2
+   Ringgo Book — design system v2
    Palet: kertas hangat 60% · tinta 30% · emerald 10%
    Grid 8pt · radius 12/16/20 · shadow tinted lembut
    Cover buku: monogram tipografis + hue per-hash judul
@@ -537,6 +537,18 @@ select:focus { border-color: var(--accent); }
   background: hsl(var(--cover-h), 35%, 82%);
 }
 :root[data-theme='dark'] .cover-line { background: hsl(var(--cover-h), 20%, 38%); }
+
+/* Cover asli (diambil online + cache IndexedDB) menimpa monogram;
+   gradien hue tetap jadi fallback offline. */
+.cover-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0; transition: opacity 0.35s ease; z-index: 1;
+}
+.card-cover.has-img > :not(.cover-img):not(.cover-cat):not(.cover-ring),
+.reader-cover.has-img > :not(.cover-img) { opacity: 0; }
+.card-cover.has-img .cover-img, .reader-cover.has-img .cover-img { opacity: 1; }
+.cover-cat, .cover-ring { z-index: 2; }
+.reader-cover { position: relative; overflow: hidden; }
 
 .cover-cat {
   position: absolute;

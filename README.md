@@ -1,4 +1,4 @@
-# Perpustakaan Ringkasan Buku — Offline (PWA + Android)
+# Ringgo Book — Ringkasan Buku Offline (PWA + Android)
 
 Aplikasi web offline berisi **4.879 ringkasan buku (±11,3 juta kata)** dari dua situs:
 

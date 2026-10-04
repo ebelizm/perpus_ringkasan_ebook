@@ -1,4 +1,4 @@
-// Aplikasi Perpustakaan Ringkasan Buku (offline)
+// Ringgo Book — aplikasi ringkasan buku (offline)
 const state = {
   index: null,
   filtered: [],
@@ -173,8 +173,202 @@ function ringHtml(pct, done) {
 }
 
 // cover monogram — konsisten di grid & reader (hue dari hash judul)
-function coverHtml(hue) {
-  return `<div class="card-cover" style="--cover-h:${hue}"><div class="cover-book"><span class="cover-mono"></span><span class="cover-line"></span></div><span class="cover-cat"></span></div>`;
+// Slot <img> disiapkan untuk cover asli yang diambil saat online (lihat di bawah).
+function coverHtml(hue, bookId) {
+  return `<div class="card-cover" style="--cover-h:${hue}"${bookId ? ` data-book="${esc(bookId)}"` : ''}><img class="cover-img" alt="" decoding="async" /><div class="cover-book"><span class="cover-mono"></span><span class="cover-line"></span></div><span class="cover-cat"></span></div>`;
+}
+
+/* ---------- Cover asli: diambil saat online, dicache di IndexedDB ----------
+   APK sengaja tidak memaketkan gambar: 4.8rb cover ≈ +61 MB. Sumber dicek
+   berurutan Wikipedia → Google Books → Open Library, dan hanya dipakai bila
+   judulnya mirip (≥0.6) supaya cover tidak salah pasang. Offline: monogram. */
+const COVER_MIN_SIM = 0.6;
+const COVER_NEG_TTL = 30 * 864e5; // hasil negatif dicache, dicoba lagi sebulan kemudian
+const COVER_MAX_CONCURRENT = 4;
+
+const coverDb = (() => {
+  let pending;
+  const open = () => (pending ||= new Promise((res, rej) => {
+    const r = indexedDB.open('covers', 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('img');
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  }));
+  const run = async (mode, fn) => {
+    const db = await open();
+    return new Promise((res, rej) => {
+      const t = db.transaction('img', mode);
+      const rq = fn(t.objectStore('img'));
+      t.oncomplete = () => res(rq.result);
+      t.onerror = t.onabort = () => rej(t.error);
+    });
+  };
+  return { get: (k) => run('readonly', (s) => s.get(k)), put: (k, v) => run('readwrite', (s) => s.put(v, k)) };
+})();
+
+const coverWords = (s) => String(s || '').toLowerCase().replace(/^(buku|book)\s+/i, '')
+  .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
+const coverSim = (a, b) => {
+  const B = coverWords(b);
+  if (!B.length) return 0;
+  const A = new Set(coverWords(a));
+  return B.filter((w) => A.has(w)).length / B.length;
+};
+
+// Judul di katalog kadang menyisipkan nama penulis ("Everyday Millionaires Chris Hogan")
+// — buang sebelum mencari supaya kueri tetap bersih.
+function coverQuery(book) {
+  let t = String(book.title || '');
+  const a = String(book.author || '').trim();
+  if (a.length > 3) {
+    const i = t.toLowerCase().indexOf(a.toLowerCase());
+    if (i > 0) t = (t.slice(0, i) + t.slice(i + a.length)).replace(/[\s,–—-]+$/, '');
+  }
+  return coverWords(t).join(' ');
+}
+
+// fetch dengan batas waktu — satu sumber yang lambat tidak boleh menyendat antrean
+function coverFetch(url, ms = 4500) {
+  const ac = new AbortController();
+  const t = setTimeout(() => ac.abort(), ms);
+  return fetch(url, { signal: ac.signal }).finally(() => clearTimeout(t));
+}
+
+async function findCoverUrl(book) {
+  const enc = encodeURIComponent(coverQuery(book));
+  // 1. Open Library (CORS-aman, cakupan terbaik diukur: 44% title match persis)
+  try {
+    const q = `https://openlibrary.org/search.json?title=${enc}&limit=5&fields=cover_i,title`;
+    const j = await (await coverFetch(q)).json();
+    let best = null;
+    for (const d of j.docs || []) {
+      if (!d.cover_i) continue;
+      const s = coverSim(book.title, d.title);
+      if (!best || s > best.s) best = { s, url: `https://covers.openlibrary.org/b/id/${d.cover_i}-M.jpg` };
+    }
+    if (best && best.s >= COVER_MIN_SIM) return best.url;
+  } catch { /* lanjut ke Wikipedia */ }
+  // 2. Wikipedia id+en — untuk buku Indonesia; cari lewat pencarian, bukan judul persis
+  for (const lang of ['id', 'en']) {
+    try {
+      const s = await (await coverFetch(`https://${lang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srlimit=3&srsearch=${enc}`)).json();
+      for (const hit of s.query?.search || []) {
+        if (coverSim(book.title, hit.title) < COVER_MIN_SIM) continue;
+        const p = await (await coverFetch(`https://${lang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail&pithumbsize=240&titles=${encodeURIComponent(hit.title)}`)).json();
+        const pg = Object.values(p.query?.pages || {})[0];
+        if (pg?.thumbnail?.source) return pg.thumbnail.source;
+      }
+    } catch { /* sumber berikutnya */ }
+  }
+  return null;
+}
+
+const coverQueue = [];
+let coverBusy = 0;
+function queueCoverEl(el, bookId) {
+  if (!el || !bookId) return;
+  el.dataset.book = bookId;
+  const run = () => {
+    coverBusy++;
+    loadCover(el).finally(() => {
+      coverBusy--;
+      const next = coverQueue.shift();
+      if (next) queueCoverEl(next[0], next[1]);
+    });
+  };
+  if (coverBusy < COVER_MAX_CONCURRENT) run();
+  else {
+    // buang antrean untuk kartu yang sudah lepas (filter/geser cepat),
+    // supaya kartu yang baru terlihat tidak menunggu giliran yang sia-sia
+    for (let i = coverQueue.length - 1; i >= 0; i--) if (!coverQueue[i][0].isConnected) coverQueue.splice(i, 1);
+    coverQueue.push([el, bookId]);
+  }
+}
+
+async function loadCover(el) {
+  const id = el.dataset.book;
+  const book = state.byId && state.byId.get(id);
+  if (!book) return;
+  try {
+    let rec = await coverDb.get(id);
+    if (!rec || Date.now() - (rec.t || 0) > COVER_NEG_TTL) {
+      if (!navigator.onLine) {
+        if (rec && rec.ok) showCoverImg(el, rec.blob);
+        return;
+      }
+      const url = await findCoverUrl(book);
+      let blob = null;
+      if (url) {
+        try {
+          const res = await coverFetch(url, 8000);
+          const type = (res.headers.get('content-type') || '').split(';')[0];
+          if (res.ok && /^image\/(jpeg|png|webp)$/.test(type)) {
+            const b = await res.blob();
+            if (b.size > 1200) blob = b; // tolak placeholder 1×1 / gambar rusak
+          }
+        } catch {
+          // host menolak CORS → tampilkan langsung dari URL (online saja, tanpa cache)
+          showRemoteCover(el, url);
+          rec = { ok: false, url, t: Date.now(), nocache: true };
+          await coverDb.put(id, rec);
+          return;
+        }
+      }
+      rec = { ok: !!blob, blob, url, t: Date.now() };
+      await coverDb.put(id, rec);
+    }
+    if (rec.ok && rec.blob) showCoverImg(el, rec.blob);
+    else if (rec.nocache && rec.url) showRemoteCover(el, rec.url);
+  } catch (e) {
+    console.warn('cover gagal:', id, (e && e.message) || e); // tetap monogram, tapi jangan diam
+  }
+}
+
+function showCoverImg(el, blob) {
+  if (el.dataset.coverDone) return;
+  const img = coverImgEl(el);
+  const url = URL.createObjectURL(blob);
+  img.onload = () => { el.classList.add('has-img'); el.dataset.coverDone = '1'; URL.revokeObjectURL(url); };
+  img.onerror = () => URL.revokeObjectURL(url);
+  img.src = url;
+}
+
+// host tanpa CORS: <img> tetap boleh dimuat, hanya tidak bisa di-cache offline
+function showRemoteCover(el, url) {
+  if (el.dataset.coverDone) return;
+  const img = coverImgEl(el);
+  img.onload = () => { el.classList.add('has-img'); el.dataset.coverDone = '1'; };
+  img.src = url;
+}
+
+function coverImgEl(el) {
+  let img = el.querySelector('.cover-img');
+  if (!img) {
+    img = document.createElement('img');
+    img.className = 'cover-img';
+    img.alt = '';
+    img.decoding = 'async';
+    el.prepend(img);
+  }
+  return img;
+}
+
+// hanya cover di dekat layar yang diambil (hemat kuota API)
+let coverIO;
+function observeCovers() {
+  if (typeof IntersectionObserver === 'undefined') return;
+  coverIO ||= new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      coverIO.unobserve(e.target);
+      queueCoverEl(e.target, e.target.dataset.book);
+    }
+  }, { rootMargin: '250px' });
+  for (const el of document.querySelectorAll('.card-cover[data-book]')) {
+    if (el.dataset.coverQueued) continue;
+    el.dataset.coverQueued = '1';
+    coverIO.observe(el);
+  }
 }
 
 function ringBadge(pct, done) {
@@ -199,6 +393,7 @@ function toast(msg) {
 async function init() {
   showSkeletons(8);
   state.index = await fetchGzJson('data/index'); // → data/index.json.gz (web) / .json di APK
+  state.byId = new Map(state.index.books.map((b) => [b.id, b]));
   for (const b of state.index.books) validIds.add(b.id);
   const s = state.index.stats;
   $('#stat-line').textContent =
@@ -485,7 +680,7 @@ function renderMore() {
     card.className = 'card' + (doneFlag ? ' is-done' : '');
     card.style.setProperty('--i', i % 12); // stagger halus dalam batch
     card.innerHTML = `
-      ${coverHtml(hashHue(b.title))}
+      ${coverHtml(hashHue(b.title), b.id)}
       ${ringBadge(pct, doneFlag)}
       <div class="card-body">
         <h3>${highlight(b.title)}</h3>
@@ -499,6 +694,7 @@ function renderMore() {
     frag.appendChild(card);
   }
   grid.appendChild(frag);
+  observeCovers();
   // jika sentinel masih dalam jangkauan viewport (layar besar / hasil sedikit), muat batch berikutnya
   const rect = $('#sentinel').getBoundingClientRect();
   if (grid.children.length < state.filtered.length && rect.top < window.innerHeight + 600) {
@@ -557,6 +753,7 @@ async function openReader(book) {
   const hue = hashHue(book.title);
   document.querySelector('.reader-panel').style.setProperty('--cover-h', String(hue));
   $('#reader-cover-mono').textContent = monogramOf(book.title);
+  queueCoverEl($('#reader-cover'), book.id);
   $('#reader-title').textContent = book.title;
   $('#reader-hero-title').textContent = book.title;
   $('#reader-meta').textContent =

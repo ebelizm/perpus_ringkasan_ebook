@@ -56,90 +56,66 @@ function makeIcon(size, draw) {
   ]);
 }
 
-// Bentuk: buku tertutup dengan punggung berwarna + pembatas buku, dalam safe-zone maskable
-function drawBook(size, set) {
-  const bx0 = Math.round(size * 0.30), bx1 = Math.round(size * 0.70);
-  const by0 = Math.round(size * 0.24), by1 = Math.round(size * 0.76);
-  const spineW = Math.round((bx1 - bx0) * 0.14);
-  const r = Math.max(3, Math.round(size * 0.028));
-  const cut = (x, y) => {
-    const dxl = x - bx0, dxr = bx1 - x, dyt = y - by0, dyb = by1 - y;
-    return (dxl < r && dyt < r && dxl + dyt < r) ||
-           (dxr < r && dyt < r && dxr + dyt < r) ||
-           (dxl < r && dyb < r && dxl + dyb < r) ||
-           (dxr < r && dyb < r && dxr + dyb < r);
-  };
-  const bmW = Math.round((bx1 - bx0) * 0.10);
-  const bmX0 = bx1 - spineW - bmW * 2, bmX1 = bmX0 + bmW;
-  const bmY1 = by0 + Math.round((by1 - by0) * 0.26);
-  for (let y = by0; y <= by1; y++) {
-    for (let x = bx0; x <= bx1; x++) {
-      if (cut(x, y)) continue;
-      if (x < bx0 + spineW) set(x, y, 124, 156, 255);        // punggung: accent
-      else if (y <= bmY1 && x >= bmX0 && x <= bmX1) {
-        // pembatas buku dengan takik V di bawah
-        const notch = y > bmY1 - Math.round(size * 0.035) && x > (bmX0 + bmX1) / 2 - Math.round(bmW * 0.3) && x < (bmX0 + bmX1) / 2 + Math.round(bmW * 0.3);
-        if (!notch) set(x, y, 95, 212, 168);                  // hijau mint
-      } else set(x, y, 240, 243, 248);                        // halaman putih
+// Logo Ringgo Book: buku dengan cincin emerald (ring + book), aman untuk maskable
+function drawRinggo(size, set) {
+  const cx = size / 2, cy = size / 2;
+  const rOut = size * 0.36, rIn = rOut - Math.max(2, size * 0.045);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const d = Math.hypot(x + 0.5 - cx, y + 0.5 - cy);
+      if (d <= rOut && d >= rIn) set(x, y, 76, 199, 155); // cincin emerald
     }
   }
-  // garis halaman tipis di sisi kanan
-  const lineX = bx1 - Math.round(size * 0.02);
-  for (let y = by0 + r; y <= by1 - r; y++) set(lineX, y, 205, 212, 224);
+  const bx0 = Math.round(size * 0.31), bx1 = Math.round(size * 0.69);
+  const by0 = Math.round(size * 0.30), by1 = Math.round(size * 0.70);
+  const spine = Math.max(2, Math.round((bx1 - bx0) * 0.13));
+  const r = Math.max(2, Math.round(size * 0.022));
+  for (let y = by0; y <= by1; y++) {
+    for (let x = bx0; x <= bx1; x++) {
+      const dxl = x - bx0, dxr = bx1 - x, dyt = y - by0, dyb = by1 - y;
+      if ((dxl < r && dyt < r && dxl + dyt < r) || (dxr < r && dyt < r && dxr + dyt < r) ||
+          (dxl < r && dyb < r && dxl + dyb < r) || (dxr < r && dyb < r && dxr + dyb < r)) continue;
+      set(x, y, 245, 243, 236); // halaman
+    }
+  }
+  // punggung emerald
+  for (let y = by0 + r; y <= by1 - r; y++) {
+    for (let x = bx0 + r; x < bx0 + spine; x++) set(x, y, 15, 157, 118);
+  }
+  // garis teks pada halaman
+  const t = Math.max(1, Math.round(size * 0.012));
+  const lx0 = bx0 + spine + Math.round(size * 0.03), lx1 = bx1 - Math.round(size * 0.03);
+  for (let i = 0; i < 3; i++) {
+    const ly = by0 + Math.round((by1 - by0) * (0.26 + i * 0.2));
+    const end = lx0 + Math.round((lx1 - lx0) * (i === 2 ? 0.55 : 0.9));
+    for (let y = ly; y < ly + t; y++) for (let x = lx0; x < end; x++) set(x, y, 198, 196, 186);
+  }
+  // penanda emerald di tepi kanan
+  const bmW = Math.max(2, Math.round(size * 0.042));
+  const bmX0 = bx1 - spine - bmW * 2;
+  for (let y = by0 + r; y < by0 + r + Math.round((by1 - by0) * 0.3); y++) {
+    for (let x = bmX0; x < bmX0 + bmW; x++) set(x, y, 15, 157, 118);
+  }
 }
 
 fs.mkdirSync('icons', { recursive: true });
 fs.mkdirSync('assets', { recursive: true });
 for (const size of [192, 512]) {
-  const buf = makeIcon(size, drawBook);
+  const buf = makeIcon(size, drawRinggo);
   fs.writeFileSync(`icons/icon-${size}.png`, buf);
   console.log(`icons/icon-${size}.png: ${buf.length} bytes`);
 }
 
 // Ikon 1024 untuk Capacitor launcher (assets/icon.png)
-const icon1024 = makeIcon(1024, drawBook);
+const icon1024 = makeIcon(1024, drawRinggo);
 fs.writeFileSync('assets/icon.png', icon1024);
 console.log('assets/icon.png:', icon1024.length, 'bytes');
 
-// Splash 2732: latar gelap dengan buku di tengah (untuk @capacitor/assets)
+// Splash 2732: logo yang sama digambar ulang pada sub-ukuran lalu dipusatkan
 const splash = makeIcon(2732, (size, set) => {
-  const s2 = size / 2.8; // gambar ulang bentuk buku pada sub-ukuran, terpusat
-  const off = (size - s2) / 2;
-  for (let y = 0; y < Math.ceil(s2); y++) {
-    for (let x = 0; x < Math.ceil(s2); x++) {
-      let r = 0, g = 0, b = 0, hit = false;
-      // pantulkan pemanggilan set() ke buffer kecil sederhana
-      const orig = set;
-      void orig;
-      // gambar buku skala kecil manual: gunakan drawBook pada koordinat ter-offset
-      hit = false;
-      void r; void g; void b;
-      set(Math.floor(x + off), Math.floor(y + off), 0, 0, 0); // placeholder overwritten below
-    }
-  }
-  // gambar ulang: buku pada skala 2.8x lebih kecil, warna sesuai drawBook
-  const bx0 = Math.round(off + s2 * 0.30), bx1 = Math.round(off + s2 * 0.70);
-  const by0 = Math.round(off + s2 * 0.24), by1 = Math.round(off + s2 * 0.76);
-  const spineW = Math.max(2, Math.round((bx1 - bx0) * 0.14));
-  const rr = Math.max(2, Math.round(s2 * 0.028));
-  const cut = (x, y) => {
-    const dxl = x - bx0, dxr = bx1 - x, dyt = y - by0, dyb = by1 - y;
-    return (dxl < rr && dyt < rr && dxl + dyt < rr) || (dxr < rr && dyt < rr && dxr + dyt < rr) ||
-           (dxl < rr && dyb < rr && dxl + dyb < rr) || (dxr < rr && dyb < rr && dxr + dyb < rr);
-  };
-  const bmW = Math.round((bx1 - bx0) * 0.10);
-  const bmX0 = bx1 - spineW - bmW * 2, bmX1 = bmX0 + bmW;
-  const bmY1 = by0 + Math.round((by1 - by0) * 0.26);
-  for (let y = by0; y <= by1; y++) {
-    for (let x = bx0; x <= bx1; x++) {
-      if (cut(x, y)) continue;
-      if (x < bx0 + spineW) set(x, y, 124, 156, 255);
-      else if (y <= bmY1 && x >= bmX0 && x <= bmX1) {
-        const notch = y > bmY1 - Math.round(s2 * 0.035) && x > (bmX0 + bmX1) / 2 - Math.round(bmW * 0.3) && x < (bmX0 + bmX1) / 2 + Math.round(bmW * 0.3);
-        if (!notch) set(x, y, 95, 212, 168);
-      } else set(x, y, 240, 243, 248);
-    }
-  }
+  const sub = Math.round(size / 2.8);
+  const off = Math.round((size - sub) / 2);
+  drawRinggo(sub, (x, y, r, g, b) => set(x + off, y + off, r, g, b));
 });
 fs.writeFileSync('assets/splash.png', splash);
 console.log('assets/splash.png:', splash.length, 'bytes');

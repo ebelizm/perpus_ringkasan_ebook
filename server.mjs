@@ -48,5 +48,5 @@ http.createServer((req, res) => {
     res.end(buf);
   });
 }).listen(PORT, () => {
-  console.log(`Perpustakaan Ringkasan siap → http://localhost:${PORT}`);
+  console.log(`Ringgo Book siap → http://localhost:${PORT}`);
 });

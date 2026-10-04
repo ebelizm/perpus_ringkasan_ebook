@@ -1,6 +1,6 @@
 {
   "appId": "com.perpustakaan.ringkasan",
-  "appName": "Perpustakaan Ringkasan",
+  "appName": "Ringgo Book",
   "webDir": "www",
   "server": {
     "androidScheme": "https"
