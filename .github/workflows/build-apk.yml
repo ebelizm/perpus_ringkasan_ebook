@@ -38,8 +38,25 @@ jobs:
         # stabil — lompatan major Capacitor tidak boleh memecah CI tiba-tiba.
         run: npm install --no-save @capacitor/cli@8 @capacitor/core@8 @capacitor/android@8 @capacitor/assets
 
+      # run_number dipakai sebagai versionCode, bukan `git rev-list --count HEAD`:
+      # checkout default fetch-depth: 1 jadi jumlah commit di CI selalu 1, yang
+      # membuat setiap APK terbaca versi sama. run_number naik monoton per workflow.
       - name: Siapkan www/ + project Android
+        env:
+          ANDROID_VERSION_CODE: ${{ github.run_number }}
         run: node scripts/prepare-android.mjs
+
+      - name: Verifikasi versi Android naik
+        env:
+          EXPECTED: ${{ github.run_number }}
+        run: |
+          CODE=$(grep -oE 'versionCode\s+[0-9]+' android/app/build.gradle | grep -oE '[0-9]+')
+          NAME=$(grep -oE 'versionName\s+"[^"]+"' android/app/build.gradle | grep -oE '"[^"]+"' | tr -d '"')
+          echo "versionCode=$CODE versionName=$NAME (run_number=$EXPECTED)"
+          if [ "$CODE" != "$EXPECTED" ] || [ "$CODE" -lt 1 ]; then
+            echo "::error::versionCode ($CODE) tidak sesuai run_number ($EXPECTED) — APK mungkin dianggap downgrade"
+            exit 1
+          fi
 
       - name: Build release APK (R8 + shrink resources)
         working-directory: android
@@ -93,7 +110,7 @@ jobs:
         run: |
           APK=android/app/build/outputs/apk/release/app-release.apk
           VERSION=$(grep -oE 'versionName\s+"[^"]+"' android/app/build.gradle | grep -oE '"[^"]+"' | tr -d '"')
-          NOTE="APK build \`${{ github.sha }}\` (versionName $VERSION). Data katalog ikut terisi di dalam APK — unduh ulang utuh saat memasang."
+          NOTE="APK build \`${{ github.sha }}\` — versionName $VERSION. Data katalog sudah ikut tertanam di dalam APK, jadi mengunduh ulang/upgrading selalu ambil data terbaru. Ganti versi: uninstall APK lama dulu (tanda tangan keystore debug)."
           if gh release view apk > /dev/null 2>&1; then
             gh release upload apk "$APK" --clobber
             gh release edit apk --title "Ringgo Book (APK terbaru)" --notes "$NOTE" > /dev/null
